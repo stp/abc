@@ -73,25 +73,32 @@ int Abc_RealMain( int argc, char * argv[] )
 //    Npn_Experiment();
 //    Npn_Generate();
 
-	// get global frame (singleton pattern)
-	// will be initialized on first call
-	pAbc = Abc_FrameGetGlobalFrame();
+    // get global frame (singleton pattern)
+    // will be initialized on first call
+    pAbc = Abc_FrameGetGlobalFrame();
 
 #ifdef ABC_PYTHON_EMBED
-	{
-		PyObject* pName;
-		PyObject* pModule;
-		void init_pyabc(void);
+    {
+        PyObject* pName;
+        PyObject* pModule;
+        void init_pyabc(void);
 
-		Py_SetProgramName(argv[0]);
-		Py_NoSiteFlag = 1;
-		Py_Initialize();
+        Py_SetProgramName(argv[0]);
+        Py_NoSiteFlag = 1;
+        Py_Initialize();
 
-		init_pyabc();
+        init_pyabc();
 
-		pModule = PyImport_ImportModule("pyabc");
-		Py_DECREF(pModule);
-	}
+        pModule = PyImport_ImportModule("pyabc");
+        if (pModule)
+        {
+            Py_DECREF(pModule);
+        }
+        else
+        {
+            fprintf( pAbc->Err, "error: pyabc.py not found. PYTHONPATH may not be set properly.\n");
+        }
+    }
 #endif /* ABC_PYTHON_EMBED */
 
     // default options
