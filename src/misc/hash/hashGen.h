@@ -1,6 +1,6 @@
 /**CFile****************************************************************
 
-  FileName    [hashFlt.h]
+  FileName    [vecGen.h]
 
   SystemName  [ABC: Logic synthesis and verification system.]
 
@@ -8,18 +8,18 @@
 
   Synopsis    [Hash maps.]
 
-  Author      [Aaron P. Hurst]
+  Author      [Aaron P. Hurst, Alan Mishchenko]
   
   Affiliation [UC Berkeley]
 
-  Date        [Ver. 1.0. Started - May 16, 2006.]
+  Date        [Ver. 1.0. Started - Jan 26, 2011.]
 
-  Revision    [$Id: vecInt.h,v 1.00 2005/06/20 00:00:00 ahurst Exp $]
+  Revision    [$Id: vecGen.h,v 1.00 2005/06/20 00:00:00 ahurst Exp $]
 
 ***********************************************************************/
  
-#ifndef __HASH_PTR_H__
-#define __HASH_PTR_H__
+#ifndef __HASH_GEN_H__
+#define __HASH_GEN_H__
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -32,8 +32,6 @@
 ABC_NAMESPACE_HEADER_START
 
 
-extern int Hash_DefaultHashFunc(int key, int nBins);
-
 ////////////////////////////////////////////////////////////////////////
 ///                         PARAMETERS                               ///
 ////////////////////////////////////////////////////////////////////////
@@ -42,22 +40,23 @@ extern int Hash_DefaultHashFunc(int key, int nBins);
 ///                         BASIC TYPES                              ///
 ////////////////////////////////////////////////////////////////////////
 
-typedef struct Hash_Ptr_t_       Hash_Ptr_t;
-typedef struct Hash_Ptr_Entry_t_ Hash_Ptr_Entry_t;
+typedef struct Hash_Gen_t_       Hash_Gen_t;
+typedef struct Hash_Gen_Entry_t_ Hash_Gen_Entry_t;
 
-struct Hash_Ptr_Entry_t_
+struct Hash_Gen_Entry_t_
 {
-  int                              key;
-  void *                           data;
-  struct Hash_Ptr_Entry_t_ *       pNext;
+  char *                          key;
+  void *                          data;
+  struct Hash_Gen_Entry_t_ *     pNext;
 };
 
-struct Hash_Ptr_t_ 
+struct Hash_Gen_t_ 
 {
   int                             nSize;
   int                             nBins;
-  int (* fHash)(int key, int nBins);
-  Hash_Ptr_Entry_t **             pArray;
+  int (* fHash)(void * key, int nBins);
+  int (* fComp)(void * key, void * key);
+  Hash_Gen_Entry_t **            pArray;
 };
 
 
@@ -66,13 +65,34 @@ struct Hash_Ptr_t_
 ///                      MACRO DEFINITIONS                           ///
 ////////////////////////////////////////////////////////////////////////
 
-#define Hash_PtrForEachEntry( pHash, pEntry, bin )   \
+#define Hash_GenForEachEntry( pHash, pEntry, bin )   \
   for(bin=-1, pEntry=NULL; bin < pHash->nBins; (!pEntry)?(pEntry=pHash->pArray[++bin]):(pEntry=pEntry->pNext)) \
     if (pEntry)
 
 ////////////////////////////////////////////////////////////////////////
 ///                     FUNCTION DEFINITIONS                         ///
 ////////////////////////////////////////////////////////////////////////
+
+/**Function*************************************************************
+
+  Synopsis    [Default hash function for strings.]
+
+  Description []
+               
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static int Hash_DefaultHashFuncStr( void * key, int nBins )
+{
+    int i, Value = 0;
+    if ( key[0] == 0 )
+        return 0;
+    for ( i = strlen(key)-1; i >= 0; i-- )
+        Value = 5 * Value + key[i];
+    return Value % nBins;
+}
 
 /**Function*************************************************************
 
@@ -85,19 +105,20 @@ struct Hash_Ptr_t_
   SeeAlso     []
 
 ***********************************************************************/
-static inline Hash_Ptr_t * Hash_PtrAlloc( int nBins )
+static inline Hash_Gen_t * Hash_GenAlloc( 
+  int nBins, 
+  int (*Hash_FuncHash)(void *, int), 
+  int (*Hash_FuncComp)(void *, void *) )
 {
-  Hash_Ptr_t * p;
+  Hash_Gen_t * p;
   int i;
   assert(nBins > 0);
-  p = ABC_ALLOC( Hash_Ptr_t, 1);
-  p->nBins = nBins;
-  p->fHash = Hash_DefaultHashFunc;
+  p = ABC_CALLOC( Hash_Gen_t, 1 );
+  p->nBins  = nBins;
+  p->fHash  = Hash_FuncHash? Hash_FuncHash : (int (*)(void *, int))Hash_DefaultHashFuncStr;
+  p->fComp  = Hash_FuncComp? Hash_FuncComp : (int (*)(void *, void *))strcmp;
   p->nSize  = 0;
-  p->pArray = ABC_ALLOC( Hash_Ptr_Entry_t *, nBins );
-  for(i=0; i<nBins; i++)
-    p->pArray[i] = NULL;
-
+  p->pArray = ABC_CALLOC( Hash_Gen_Entry_t *, nBins );
   return p;
 }
 
@@ -112,10 +133,10 @@ static inline Hash_Ptr_t * Hash_PtrAlloc( int nBins )
   SeeAlso     []
 
 ***********************************************************************/
-static inline int Hash_PtrExists( Hash_Ptr_t *p, int key )
+static inline int Hash_GenExists( Hash_Gen_t *p, void * key )
 {
   int bin;
-  Hash_Ptr_Entry_t *pEntry;
+  Hash_Gen_Entry_t *pEntry;
 
   // find the bin where this key would live
   bin = (*(p->fHash))(key, p->nBins);
@@ -123,7 +144,7 @@ static inline int Hash_PtrExists( Hash_Ptr_t *p, int key )
   // search for key
   pEntry = p->pArray[bin];
   while(pEntry) {
-    if (pEntry->key == key) {
+    if ( !p->fComp(pEntry->key,key) ) {
       return 1;
     }
     pEntry = pEntry->pNext;
@@ -143,10 +164,10 @@ static inline int Hash_PtrExists( Hash_Ptr_t *p, int key )
   SeeAlso     []
 
 ***********************************************************************/
-static inline void Hash_PtrWriteEntry( Hash_Ptr_t *p, int key, void * data )
+static inline void Hash_GenWriteEntry( Hash_Gen_t *p, void * key, void * data )
 {
   int bin;
-  Hash_Ptr_Entry_t *pEntry, **pLast;
+  Hash_Gen_Entry_t *pEntry, **pLast;
 
   // find the bin where this key would live
   bin = (*(p->fHash))(key, p->nBins);
@@ -155,7 +176,7 @@ static inline void Hash_PtrWriteEntry( Hash_Ptr_t *p, int key, void * data )
   pLast = &(p->pArray[bin]);
   pEntry = p->pArray[bin];
   while(pEntry) {
-    if (pEntry->key == key) {
+    if ( !p->fComp(pEntry->key,key) ) {
       pEntry->data = data;
       return;
     }
@@ -166,9 +187,9 @@ static inline void Hash_PtrWriteEntry( Hash_Ptr_t *p, int key, void * data )
   // this key does not currently exist
   // create a new entry and add to bin
   p->nSize++;
-  (*pLast) = pEntry = ABC_ALLOC( Hash_Ptr_Entry_t, 1 );
+  (*pLast) = pEntry = ABC_ALLOC( Hash_Gen_Entry_t, 1 );
   pEntry->pNext = NULL;
-  pEntry->key = key;
+  pEntry->key  = key;
   pEntry->data = data;
 
   return;
@@ -186,10 +207,10 @@ static inline void Hash_PtrWriteEntry( Hash_Ptr_t *p, int key, void * data )
   SeeAlso     []
 
 ***********************************************************************/
-static inline void * Hash_PtrEntry( Hash_Ptr_t *p, int key, int fCreate )
+static inline void * Hash_GenEntry( Hash_Gen_t *p, void * key, int fCreate )
 {
   int bin;
-  Hash_Ptr_Entry_t *pEntry, **pLast;
+  Hash_Gen_Entry_t *pEntry, **pLast;
 
   // find the bin where this key would live
   bin = (*(p->fHash))(key, p->nBins);
@@ -198,7 +219,7 @@ static inline void * Hash_PtrEntry( Hash_Ptr_t *p, int key, int fCreate )
   pLast = &(p->pArray[bin]);
   pEntry = p->pArray[bin];
   while(pEntry) {
-    if (pEntry->key == key)
+    if ( !p->fComp(pEntry->key,key) )
       return pEntry->data;
     pLast = &(pEntry->pNext);
     pEntry = pEntry->pNext;
@@ -208,9 +229,9 @@ static inline void * Hash_PtrEntry( Hash_Ptr_t *p, int key, int fCreate )
   if (fCreate) {
     // create a new entry and add to bin
     p->nSize++;
-    (*pLast) = pEntry = ABC_ALLOC( Hash_Ptr_Entry_t, 1 );
+    (*pLast) = pEntry = ABC_ALLOC( Hash_Gen_Entry_t, 1 );
     pEntry->pNext = NULL;
-    pEntry->key = key;
+    pEntry->key  = key;
     pEntry->data = NULL;
     return pEntry->data;
   }
@@ -230,10 +251,10 @@ static inline void * Hash_PtrEntry( Hash_Ptr_t *p, int key, int fCreate )
   SeeAlso     []
 
 ***********************************************************************/
-static inline void** Hash_PtrEntryPtr( Hash_Ptr_t *p, int key )
+static inline void** Hash_GenEntryPtr( Hash_Gen_t *p, void * key )
 {
   int bin;
-  Hash_Ptr_Entry_t *pEntry, **pLast;
+  Hash_Gen_Entry_t *pEntry, **pLast;
 
   // find the bin where this key would live
   bin = (*(p->fHash))(key, p->nBins);
@@ -242,7 +263,7 @@ static inline void** Hash_PtrEntryPtr( Hash_Ptr_t *p, int key )
   pLast = &(p->pArray[bin]);
   pEntry = p->pArray[bin];
   while(pEntry) {
-    if (pEntry->key == key)
+    if ( !p->fComp(pEntry->key,key) )
       return &(pEntry->data);
     pLast = &(pEntry->pNext);
     pEntry = pEntry->pNext;
@@ -251,9 +272,9 @@ static inline void** Hash_PtrEntryPtr( Hash_Ptr_t *p, int key )
   // this key does not currently exist
   // create a new entry and add to bin
   p->nSize++;
-  (*pLast) = pEntry = ABC_ALLOC( Hash_Ptr_Entry_t, 1 );
+  (*pLast) = pEntry = ABC_ALLOC( Hash_Gen_Entry_t, 1 );
   pEntry->pNext = NULL;
-  pEntry->key = key;
+  pEntry->key  = key;
   pEntry->data = NULL;
 
   return &(pEntry->data);
@@ -270,11 +291,11 @@ static inline void** Hash_PtrEntryPtr( Hash_Ptr_t *p, int key )
   SeeAlso     []
 
 ***********************************************************************/
-static inline void* Hash_PtrRemove( Hash_Ptr_t *p, int key )
+static inline void* Hash_GenRemove( Hash_Gen_t *p, void * key )
 {
   int    bin;
   void * data;
-  Hash_Ptr_Entry_t *pEntry, **pLast;
+  Hash_Gen_Entry_t *pEntry, **pLast;
 
   // find the bin where this key would live
   bin = (*(p->fHash))(key, p->nBins);
@@ -283,7 +304,7 @@ static inline void* Hash_PtrRemove( Hash_Ptr_t *p, int key )
   pLast = &(p->pArray[bin]);
   pEntry = p->pArray[bin];
   while(pEntry) {
-    if (pEntry->key == key) {
+    if ( !p->fComp(pEntry->key,key) ) {
       p->nSize--;
       data = pEntry->data;
       *pLast = pEntry->pNext;
@@ -308,10 +329,10 @@ static inline void* Hash_PtrRemove( Hash_Ptr_t *p, int key )
   SeeAlso     []
 
 ***********************************************************************/
-static inline void Hash_PtrFree( Hash_Ptr_t *p ) 
+static inline void Hash_GenFree( Hash_Gen_t *p ) 
 {
   int bin;
-  Hash_Ptr_Entry_t *pEntry, *pTemp;
+  Hash_Gen_Entry_t *pEntry, *pTemp;
 
   // free bins
   for(bin = 0; bin < p->nBins; bin++) {
