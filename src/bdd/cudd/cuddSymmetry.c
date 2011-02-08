@@ -294,7 +294,8 @@ int
 cuddSymmSifting(
   DdManager * table,
   int  lower,
-  int  upper)
+  int  upper,
+  int  TimeStop)
 {
     int		i;
     int		*var;
@@ -338,6 +339,8 @@ cuddSymmSifting(
     for (i = 0; i < ddMin(table->siftMaxVar,size); i++) {
 	if (ddTotalNumberSwapping >= table->siftMaxSwap)
 	    break;
+    if ( TimeStop && TimeStop < clock() )
+        break;
 	x = table->perm[var[i]];
 #ifdef DD_STATS
 	previousSize = table->keys - table->isolated;
