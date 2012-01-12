@@ -177,7 +177,7 @@ struct Abc_Ntk_t_
     Vec_Ptr_t *       vCos;          // the array of combinational outputs (POs, asserts, latches)
     Vec_Ptr_t *       vPios;         // the array of PIOs
     Vec_Ptr_t *       vBoxes;        // the array of boxes
-	Vec_Ptr_t *       vLtlProperties;
+    Vec_Ptr_t *       vLtlProperties;
     // the number of living objects
     int nObjCounts[ABC_OBJ_NUMBER];  // the number of objects by type
     int               nObjs;         // the number of live objs
@@ -777,6 +777,7 @@ extern ABC_DLL void               Abc_NtkRecStop();
 extern ABC_DLL void               Abc_NtkRecAdd( Abc_Ntk_t * pNtk );
 extern ABC_DLL void               Abc_NtkRecPs();
 extern ABC_DLL void               Abc_NtkRecFilter(int nLimit);
+extern ABC_DLL void               Abc_NtkRecLibMerge(Abc_Ntk_t * pNtk);
 extern ABC_DLL Abc_Ntk_t *        Abc_NtkRecUse();
 extern ABC_DLL int                Abc_NtkRecIsRunning();
 extern ABC_DLL int                Abc_NtkRecIsInTrimMode();
