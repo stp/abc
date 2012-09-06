@@ -117,7 +117,7 @@ void Abc_TruthNpnPerform( Abc_TtStore_t * p, int NpnType, int fVerbose )
 {
     unsigned pAux[2048];
     char pCanonPerm[32];
-	unsigned uCanonPhase=0;
+    unsigned uCanonPhase=0;
     clock_t clk = clock();
     int i;
 

@@ -1619,8 +1619,8 @@ s_pMan->timeBuild += clock() - timeBuild;
     timeInsert = clock();
     Abc_NtkRecInsertToLookUpTable2(s_pMan, ppSpot, pPO, nLeaves, pTruth, s_pMan->fTrim);
     s_pMan->timeInsert += clock() - timeInsert;
-// 	if (pIfMan->pPars->fDelayOpt)
-// 		Abc_NtkRecAddSOPB(pIfMan, pCut, pTruth, pCanonPerm, uCanonPhase );
+//  if (pIfMan->pPars->fDelayOpt)
+//      Abc_NtkRecAddSOPB(pIfMan, pCut, pTruth, pCanonPerm, uCanonPhase );
     return 1;
 }
 
@@ -1669,18 +1669,18 @@ void Abc_NtkRecAdd2( Abc_Ntk_t * pNtk, int fUseSOPB)
     pPars->fVerbose    =  0;
     //pPars->fCutMin     =  1;
     // internal parameters
-	if (fUseSOPB)
-	{
-		pPars->fTruth      =  1;
-		pPars->fUsePerm    =  1; 
-		pPars->fDelayOpt   =  1;
-	}
-	else
-	{
-		pPars->fTruth      =  1;
-		pPars->fUsePerm    =  0; 
-		pPars->fDelayOpt   =  0;
-	}
+    if (fUseSOPB)
+    {
+        pPars->fTruth      =  1;
+        pPars->fUsePerm    =  1; 
+        pPars->fDelayOpt   =  1;
+    }
+    else
+    {
+        pPars->fTruth      =  1;
+        pPars->fUsePerm    =  0; 
+        pPars->fDelayOpt   =  0;
+    }
     pPars->nLatchesCi  =  0;
     pPars->nLatchesCo  =  0;
     pPars->pLutLib     =  NULL; // Abc_FrameReadLibLut();
@@ -1744,28 +1744,28 @@ static inline int If_CutComputDelay(If_Man_t* p, Rec_Obj_t2* entry, If_Cut_t* pC
 ***********************************************************************/
  static int Abc_NtkRecLookUpEnum(If_Man_t * pIfMan,If_Cut_t * pCut, int * ppSpot, int * pCandMin, char * pCanonPerm)
  {
-	int DelayMin = ABC_INFINITY , Delay = -ABC_INFINITY;
-	int pCand;
-	int nLeaves = pCut->nLeaves;
+    int DelayMin = ABC_INFINITY , Delay = -ABC_INFINITY;
+    int pCand;
+    int nLeaves = pCut->nLeaves;
     *pCandMin = -1;
-	assert( *ppSpot != -1 );
-	for ( pCand = *ppSpot; pCand != -1 ; pCand = Rec_Obj(s_pMan,pCand)->pNext )
-	{
-		s_pMan->nFunsDelayComput++; 
-		Delay = If_CutComputDelay(pIfMan, Rec_Obj(s_pMan,pCand), pCut, pCanonPerm ,nLeaves);
-		if ( DelayMin > Delay )
-		{
-			DelayMin = Delay;
-			*pCandMin = pCand;
-		}
-		else if(Delay == DelayMin)
-		{
-			if(Rec_Obj(s_pMan,pCand)->cost < Rec_Obj(s_pMan, *pCandMin)->cost)
-				*pCandMin = pCand;
-		}
-	}
-	assert( *pCandMin != -1 );
-	return DelayMin;
+    assert( *ppSpot != -1 );
+    for ( pCand = *ppSpot; pCand != -1 ; pCand = Rec_Obj(s_pMan,pCand)->pNext )
+    {
+        s_pMan->nFunsDelayComput++; 
+        Delay = If_CutComputDelay(pIfMan, Rec_Obj(s_pMan,pCand), pCut, pCanonPerm ,nLeaves);
+        if ( DelayMin > Delay )
+        {
+            DelayMin = Delay;
+            *pCandMin = pCand;
+        }
+        else if(Delay == DelayMin)
+        {
+            if(Rec_Obj(s_pMan,pCand)->cost < Rec_Obj(s_pMan, *pCandMin)->cost)
+                *pCandMin = pCand;
+        }
+    }
+    assert( *pCandMin != -1 );
+    return DelayMin;
  }
 
  /**Function*************************************************************
@@ -1781,48 +1781,48 @@ static inline int If_CutComputDelay(If_Man_t* p, Rec_Obj_t2* entry, If_Cut_t* pC
 ***********************************************************************/
  static Rec_Obj_t2 * Abc_NtkRecLookUpBest(If_Man_t * pIfMan,If_Cut_t * pCut, unsigned * pInOut, char * pCanonPerm,  int * fCompl, int * delayBest)
  {
-	 int pCandMin = REC_EMPTY_ID, pCandMinCompl = REC_EMPTY_ID, *ppSpot;
-	 int delay = ABC_INFINITY, delayCompl = ABC_INFINITY;
-	 int nVars = s_pMan->nVars;
-	 //int nLeaves = pCut->nLeaves;
-	 ppSpot = Abc_NtkRecTableLookup2(s_pMan, s_pMan->pBins, s_pMan->nBins, pInOut, nVars );
-	 if (*ppSpot != REC_EMPTY_ID)
-		 delay = Abc_NtkRecLookUpEnum(pIfMan, pCut, ppSpot, &pCandMin, pCanonPerm);
-	 Kit_TruthNot(pInOut, pInOut, nVars);
-	 ppSpot = Abc_NtkRecTableLookup2(s_pMan, s_pMan->pBins, s_pMan->nBins, pInOut, nVars );
-	 if (*ppSpot != REC_EMPTY_ID)
-		 delayCompl = Abc_NtkRecLookUpEnum(pIfMan, pCut, ppSpot, &pCandMinCompl, pCanonPerm);
-	 if (delayBest)
-		 *delayBest = delay < delayCompl ? delay : delayCompl;
-	 if (pCandMin == REC_EMPTY_ID && pCandMinCompl == REC_EMPTY_ID)
-		 return NULL;
-	 else if (pCandMin != REC_EMPTY_ID && pCandMinCompl != REC_EMPTY_ID)
-	 {
-		 if (delay > delayCompl || (delay == delayCompl && Rec_Obj(s_pMan, pCandMin)->cost > Rec_Obj(s_pMan, pCandMinCompl)->cost))
-		 {
-			 if (fCompl)
-				 *fCompl = 1;
-			 return Rec_Obj(s_pMan, pCandMinCompl);
-		 }
-		 else
-		 {
-			 if (fCompl)
-				 *fCompl = 0;
-			 return Rec_Obj(s_pMan, pCandMin);
-		 }
-	 }
-	 else if (pCandMin != REC_EMPTY_ID)
-	 {
-		 if (fCompl)
-			 *fCompl = 0;
-		 return Rec_Obj(s_pMan, pCandMin);
-	 }
-	 else
-	 {
-		 if (fCompl)
-			 *fCompl = 1;
-		 return Rec_Obj(s_pMan, pCandMinCompl);
-	 }
+     int pCandMin = REC_EMPTY_ID, pCandMinCompl = REC_EMPTY_ID, *ppSpot;
+     int delay = ABC_INFINITY, delayCompl = ABC_INFINITY;
+     int nVars = s_pMan->nVars;
+     //int nLeaves = pCut->nLeaves;
+     ppSpot = Abc_NtkRecTableLookup2(s_pMan, s_pMan->pBins, s_pMan->nBins, pInOut, nVars );
+     if (*ppSpot != REC_EMPTY_ID)
+         delay = Abc_NtkRecLookUpEnum(pIfMan, pCut, ppSpot, &pCandMin, pCanonPerm);
+     Kit_TruthNot(pInOut, pInOut, nVars);
+     ppSpot = Abc_NtkRecTableLookup2(s_pMan, s_pMan->pBins, s_pMan->nBins, pInOut, nVars );
+     if (*ppSpot != REC_EMPTY_ID)
+         delayCompl = Abc_NtkRecLookUpEnum(pIfMan, pCut, ppSpot, &pCandMinCompl, pCanonPerm);
+     if (delayBest)
+         *delayBest = delay < delayCompl ? delay : delayCompl;
+     if (pCandMin == REC_EMPTY_ID && pCandMinCompl == REC_EMPTY_ID)
+         return NULL;
+     else if (pCandMin != REC_EMPTY_ID && pCandMinCompl != REC_EMPTY_ID)
+     {
+         if (delay > delayCompl || (delay == delayCompl && Rec_Obj(s_pMan, pCandMin)->cost > Rec_Obj(s_pMan, pCandMinCompl)->cost))
+         {
+             if (fCompl)
+                 *fCompl = 1;
+             return Rec_Obj(s_pMan, pCandMinCompl);
+         }
+         else
+         {
+             if (fCompl)
+                 *fCompl = 0;
+             return Rec_Obj(s_pMan, pCandMin);
+         }
+     }
+     else if (pCandMin != REC_EMPTY_ID)
+     {
+         if (fCompl)
+             *fCompl = 0;
+         return Rec_Obj(s_pMan, pCandMin);
+     }
+     else
+     {
+         if (fCompl)
+             *fCompl = 1;
+         return Rec_Obj(s_pMan, pCandMinCompl);
+     }
  }
 
  /**Function*************************************************************
@@ -1873,7 +1873,7 @@ int If_CutDelayRecCost2(If_Man_t* p, If_Cut_t* pCut, If_Obj_t * pObj)
             else
                 pCut->pPerm[i] = IF_BIG_CHAR;
         }
-			
+            
         return DelayMin;
     }
     timeCanonicize = clock();
@@ -1883,10 +1883,10 @@ int If_CutDelayRecCost2(If_Man_t* p, If_Cut_t* pCut, If_Obj_t * pObj)
     uCanonPhase = Kit_TruthSemiCanonicize(pInOut, pTemp, nLeaves, pCanonPerm);
     If_CutTruthStretch(pInOut, nLeaves, nVars);
     s_pMan->timeIfCanonicize += clock() - timeCanonicize;   
-	timeDelayComput = clock();
-	pCandMin = Abc_NtkRecLookUpBest(p, pCut, pInOut, pCanonPerm, NULL,pDelayBest);
+    timeDelayComput = clock();
+    pCandMin = Abc_NtkRecLookUpBest(p, pCut, pInOut, pCanonPerm, NULL,pDelayBest);
     assert (!(pCandMin == NULL && nLeaves == 2));
-	s_pMan->timeIfComputDelay += clock() - timeDelayComput;
+    s_pMan->timeIfComputDelay += clock() - timeDelayComput;
     //functional class not found in the library.
     if ( pCandMin == NULL )
     {
@@ -1972,23 +1972,23 @@ Hop_Obj_t * Abc_RecToHop2( Hop_Man_t * pMan, If_Man_t * pIfMan, If_Cut_t * pCut,
     unsigned *pTemp = s_pMan->pTemp2;
     int time = clock();
     int fCompl;
-	int * pCompl = &fCompl;
+    int * pCompl = &fCompl;
     nLeaves = If_CutLeaveNum(pCut);
 //  if (nLeaves < 3)
 //      return Abc_NodeTruthToHop(pMan, pIfMan, pCut);
     Kit_TruthCopy(pInOut, If_CutTruth(pCut), pCut->nLimit);
-	//special cases when cut-minimization return 2, that means there is only one leaf in the cut.
+    //special cases when cut-minimization return 2, that means there is only one leaf in the cut.
     if ((Kit_TruthIsConst0(pInOut, nLeaves) && pCut->fCompl == 0) || (Kit_TruthIsConst1(pInOut, nLeaves) && pCut->fCompl == 1))
         return Hop_ManConst0(pMan);
     if ((Kit_TruthIsConst0(pInOut, nLeaves) && pCut->fCompl == 1) || (Kit_TruthIsConst1(pInOut, nLeaves) && pCut->fCompl == 0))
         return Hop_ManConst1(pMan);
-	if (Kit_TruthSupport(pInOut, nLeaves) != Kit_BitMask(nLeaves))
-	{   
-		for (i = 0; i < nLeaves; i++)
-			if(Kit_TruthVarInSupport( pInOut, nLeaves, i ))
-				return Hop_NotCond(Hop_IthVar(pMan, i), (pCut->fCompl ^ ((*pInOut & 0x01) > 0)));
-	}
-	
+    if (Kit_TruthSupport(pInOut, nLeaves) != Kit_BitMask(nLeaves))
+    {   
+        for (i = 0; i < nLeaves; i++)
+            if(Kit_TruthVarInSupport( pInOut, nLeaves, i ))
+                return Hop_NotCond(Hop_IthVar(pMan, i), (pCut->fCompl ^ ((*pInOut & 0x01) > 0)));
+    }
+    
     for (i = 0; i < nLeaves; i++)
         pCanonPerm[i] = i;
     uCanonPhase = Kit_TruthSemiCanonicize(pInOut, pTemp, nLeaves, pCanonPerm);

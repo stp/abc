@@ -114,7 +114,7 @@ static inline Abc_TtStore_t * Abc_TruthStoreAlloc( int nVars, int nFuncs )
 // free memory previously allocated for storing truth tables
 static inline void Abc_TruthStoreFree( Abc_TtStore_t * p )
 {
-	free( p->pFuncs[0] );
+    free( p->pFuncs[0] );
     free( p->pFuncs );
     free( p );
 }
@@ -199,11 +199,11 @@ static void Abc_TruthGetParams( char * pFileName, int * pnVars, int * pnTruths )
 
 static Abc_TtStore_t * Abc_Create_TtSpore (char * pFileInput)
 {
-	int nVars, nTruths;
-	Abc_TtStore_t * p;
-	Abc_TruthGetParams( pFileInput, &nVars, &nTruths );
+    int nVars, nTruths;
+    Abc_TtStore_t * p;
+    Abc_TruthGetParams( pFileInput, &nVars, &nTruths );
     p = Abc_TruthStoreAlloc( nVars, nTruths );
-	return p;
+    return p;
 
 }
 // read truth tables from file
@@ -284,13 +284,13 @@ static void WriteToFile1(char * pFileName, Abc_TtStore_t * p, word** a)
     }
     for ( i = 0; i < p->nFuncs; i++ )
     {
-		fprintf( pFile, "0" );
-		fprintf( pFile, "x" );
-		for ( j=p->nWords-1; j >= 0; j-- )
-			Abc_TruthWriteHex( pFile, &a[i][j], p->nVars );
+        fprintf( pFile, "0" );
+        fprintf( pFile, "x" );
+        for ( j=p->nWords-1; j >= 0; j-- )
+            Abc_TruthWriteHex( pFile, &a[i][j], p->nVars );
         fprintf( pFile, "\n" );
     }
-	fprintf( pFile, "\n" );
+    fprintf( pFile, "\n" );
     fclose( pFile );
 }
 static void WriteToFile2(char * pFileName, Abc_TtStore_t * p, word* a)
@@ -305,28 +305,28 @@ static void WriteToFile2(char * pFileName, Abc_TtStore_t * p, word* a)
     }
     for ( i = 0; i < p->nFuncs; i++ )
     {
-		fprintf( pFile, "0" );
-		fprintf( pFile, "x" );
-		for ( j=p->nWords-1; j >= 0; j-- )
-			Abc_TruthWriteHex( pFile, a+i, p->nVars );
+        fprintf( pFile, "0" );
+        fprintf( pFile, "x" );
+        for ( j=p->nWords-1; j >= 0; j-- )
+            Abc_TruthWriteHex( pFile, a+i, p->nVars );
         fprintf( pFile, "\n" );
     }
-	fprintf( pFile, "\n" );
+    fprintf( pFile, "\n" );
     fclose( pFile );
 }
 
 
 Abc_TtStore_t * setTtStore(char * pFileInput)
 {
-	int nVars, nTruths;
-	Abc_TtStore_t * p;
+    int nVars, nTruths;
+    Abc_TtStore_t * p;
     // figure out how many truth table and how many variables
     Abc_TruthGetParams( pFileInput, &nVars, &nTruths );
-	// allocate data-structure
+    // allocate data-structure
     p = Abc_TruthStoreAlloc( nVars, nTruths );
 
     Abc_TruthStoreRead( pFileInput, p );
-	return p;
+    return p;
 }
 
 

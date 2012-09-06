@@ -4911,7 +4911,7 @@ usage:
     Abc_Print( -2, "\t               2: semi-canonical form by counting 1s in cofactors\n" );
     Abc_Print( -2, "\t               3: semi-canonical form by minimizing truth table value\n" );
     Abc_Print( -2, "\t               4: hybrid semi-canonical form (works only for 6 variables)\n" );
-	Abc_Print( -2, "\t               5: Jake's hybrid semi-canonical form (works up to 16 variables)\n" );
+    Abc_Print( -2, "\t               5: Jake's hybrid semi-canonical form (works up to 16 variables)\n" );
     Abc_Print( -2, "\t-v       : toggle verbose printout [default = %s]\n", fVerbose? "yes": "no" );
     Abc_Print( -2, "\t-h       : print the command usage\n");
     return 1;
@@ -12527,16 +12527,16 @@ int Abc_CommandRecAdd( Abc_Frame_t * pAbc, int argc, char ** argv )
 {
     Abc_Ntk_t * pNtk = Abc_FrameReadNtk(pAbc);
     int c;
-	int fUseSOPB = 0;
+    int fUseSOPB = 0;
     // set defaults
     Extra_UtilGetoptReset();
     while ( ( c = Extra_UtilGetopt( argc, argv, "gh" ) ) != EOF )
     {
         switch ( c )
         {
-		case 'g':
-			fUseSOPB = 1;
-			break;
+        case 'g':
+            fUseSOPB = 1;
+            break;
         case 'h':
             goto usage;
         default:
@@ -12943,16 +12943,16 @@ int Abc_CommandRecAdd2( Abc_Frame_t * pAbc, int argc, char ** argv )
 {
     Abc_Ntk_t * pNtk = Abc_FrameReadNtk(pAbc);
     int c;
-	int fUseSOPB = 0;
+    int fUseSOPB = 0;
     // set defaults
     Extra_UtilGetoptReset();
     while ( ( c = Extra_UtilGetopt( argc, argv, "gh" ) ) != EOF )
     {
         switch ( c )
         {
-		case 'g':
-			fUseSOPB = 1;
-			break;
+        case 'g':
+            fUseSOPB = 1;
+            break;
         case 'h':
             goto usage;
         default:
@@ -14461,21 +14461,21 @@ int Abc_CommandIf( Abc_Frame_t * pAbc, int argc, char ** argv )
         pPars->fExpRed = 0;
     }
     // modify the subgraph recording
-	if ( pPars->fUserRecLib )
-	{
-		pPars->fTruth      =  1;
+    if ( pPars->fUserRecLib )
+    {
+        pPars->fTruth      =  1;
         pPars->fCutMin     =  1;
-		pPars->fExpRed     =  0;
-		pPars->fUsePerm    =  1;
-		pPars->pLutLib     =  NULL;
-	}
+        pPars->fExpRed     =  0;
+        pPars->fUsePerm    =  1;
+        pPars->pLutLib     =  NULL;
+    }
     // modify for global delay optimization
     if ( pPars->fDelayOpt )
     {
         pPars->fTruth      =  1;
         pPars->fCutMin     =  1;
         pPars->fExpRed     =  0;
-		pPars->fUsePerm    =  1;
+        pPars->fUsePerm    =  1;
         pPars->pLutLib     =  NULL;
     }
     // modify for global delay optimization
@@ -14484,7 +14484,7 @@ int Abc_CommandIf( Abc_Frame_t * pAbc, int argc, char ** argv )
         pPars->fTruth      =  1;
         pPars->fCutMin     =  1;
         pPars->fExpRed     =  0;
-		pPars->fUsePerm    =  1;
+        pPars->fUsePerm    =  1;
         pPars->pLutLib     =  NULL;
         pPars->nLutSize    =  pPars->nGateSize; 
     }

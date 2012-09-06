@@ -56,47 +56,47 @@ typedef struct
 
 typedef struct 
 {
-	int direction; 
-	int position;
+    int direction; 
+    int position;
 } varInfo;
 
 
 typedef struct 
 {
-	varInfo* posArray;
-	int* realArray;
-	int varN;
-	int positionToSwap1;
-	int positionToSwap2;
+    varInfo* posArray;
+    int* realArray;
+    int varN;
+    int positionToSwap1;
+    int positionToSwap2;
 } swapInfo;
 
 typedef struct
 {
-	int varN;
-	int* swapArray;
-	int swapCtr;
-	int totalSwaps;
-	int* flipArray;
-	int flipCtr;
-	int totalFlips;	
+    int varN;
+    int* swapArray;
+    int swapCtr;
+    int totalSwaps;
+    int* flipArray;
+    int flipCtr;
+    int totalFlips; 
 }permInfo;
 
 
 static inline void TimePrint( char* Message )
 {
-	static int timeBegin;
-	double time = 1.0*(clock() - timeBegin)/CLOCKS_PER_SEC ;
-	if ( Message != NULL)
-		printf("%s = %f sec.\n", Message, time);
+    static int timeBegin;
+    double time = 1.0*(clock() - timeBegin)/CLOCKS_PER_SEC ;
+    if ( Message != NULL)
+        printf("%s = %f sec.\n", Message, time);
     timeBegin = clock();
 }
 
 static inline int CompareWords( word x, word y)
 {
-	if( x > y )
-		return 1;
-	if( x < y )
-		return -1;
+    if( x > y )
+        return 1;
+    if( x < y )
+        return -1;
     return 0;
 }
 
