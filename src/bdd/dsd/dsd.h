@@ -44,12 +44,12 @@ ABC_NAMESPACE_HEADER_START
 
 // types of DSD nodes
 enum Dsd_Type_t_ { 
-	DSD_NODE_NONE   = 0,
-	DSD_NODE_CONST1 = 1,
-	DSD_NODE_BUF    = 2,
-	DSD_NODE_OR     = 3,
-	DSD_NODE_EXOR   = 4,
-	DSD_NODE_PRIME  = 5,
+    DSD_NODE_NONE   = 0,
+    DSD_NODE_CONST1 = 1,
+    DSD_NODE_BUF    = 2,
+    DSD_NODE_OR     = 3,
+    DSD_NODE_EXOR   = 4,
+    DSD_NODE_PRIME  = 5,
 };
 
 ////////////////////////////////////////////////////////////////////////

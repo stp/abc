@@ -39,27 +39,27 @@ typedef unsigned char byte;
 // DSD manager
 struct Dsd_Manager_t_ 
 {
-	DdManager *    dd;         // the BDD manager
-	st_table *     Table;      // the mapping of BDDs into their DEs
-	int            nInputs;    // the number of primary inputs
-	int            nRoots;     // the number of primary outputs
-	int            nRootsAlloc;// the number of primary outputs
-	Dsd_Node_t **  pInputs;    // the primary input nodes
-	Dsd_Node_t **  pRoots;     // the primary output nodes
+    DdManager *    dd;         // the BDD manager
+    st__table *     Table;      // the mapping of BDDs into their DEs
+    int            nInputs;    // the number of primary inputs
+    int            nRoots;     // the number of primary outputs
+    int            nRootsAlloc;// the number of primary outputs
+    Dsd_Node_t **  pInputs;    // the primary input nodes
+    Dsd_Node_t **  pRoots;     // the primary output nodes
     Dsd_Node_t *   pConst1;    // the constant node
-	int            fVerbose;   // the verbosity level 
+    int            fVerbose;   // the verbosity level 
 };
 
 // DSD node
 struct Dsd_Node_t_
 {
-	Dsd_Type_t     Type;       // decomposition type
-	DdNode *       G;          // function of the node	 
-	DdNode *       S;          // support of this function
-	Dsd_Node_t **  pDecs;      // pointer to structures for formal inputs
-	int            Mark;       // the mark used by CASE 4 of disjoint decomposition
-	short          nDecs;      // the number of formal inputs
-	short          nVisits;    // the counter of visits
+    Dsd_Type_t     Type;       // decomposition type
+    DdNode *       G;          // function of the node   
+    DdNode *       S;          // support of this function
+    Dsd_Node_t **  pDecs;      // pointer to structures for formal inputs
+    int            Mark;       // the mark used by CASE 4 of disjoint decomposition
+    short          nDecs;      // the number of formal inputs
+    short          nVisits;    // the counter of visits
 };
 
 ////////////////////////////////////////////////////////////////////////

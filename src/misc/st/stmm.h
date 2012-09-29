@@ -116,7 +116,7 @@ EXTERN void stmm_clean ARGS ((stmm_table *));
 // added by Zhihong: no need for memory allocation
 #define stmm_foreach_item2(tb, /* stmm_generator */gen, key, value) \
     for(gen.table=(tb), gen.entry=NULL, gen.index=0; \
-	    stmm_gen(&(gen),key,value);)
+        stmm_gen(&(gen),key,value);)
 
 #define stmm_foreach_item(table, gen, key, value) \
     for(gen=stmm_init_gen(table); stmm_gen(gen,key,value) || (stmm_free_gen(gen),0);)
@@ -129,12 +129,12 @@ EXTERN void stmm_clean ARGS ((stmm_table *));
 /*
 
 // consider adding these other other similar definitions
-#define st_table       stmm_table
-#define st_insert      stmm_insert
-#define st_delete      stmm_delete
-#define st_lookup      stmm_lookup
-#define st_init_table  stmm_init_table
-#define st_free_table  stmm_free_table
+#define st__table       stmm_table
+#define st__insert      stmm_insert
+#define st__delete      stmm_delete
+#define st__lookup      stmm_lookup
+#define st__init_table  stmm_init_table
+#define st__free_table  stmm_free_table
 
 */
 
