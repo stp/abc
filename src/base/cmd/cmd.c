@@ -17,9 +17,9 @@
   Revision    [$Id: cmd.c,v 1.00 2005/06/20 00:00:00 alanmi Exp $]
 
 ***********************************************************************/
- 
+
 #ifdef WIN32
-#include <process.h> 
+#include <process.h>
 #else
 #include <unistd.h>
 #endif
@@ -75,7 +75,7 @@ extern int Cmd_CommandAbcLoadPlugIn( Abc_Frame_t * pAbc, int argc, char ** argv 
 
 ******************************************************************************/
 void Cmd_Init( Abc_Frame_t * pAbc )
-{ 
+{
     pAbc->tCommands = st__init_table(strcmp, st__strhash);
     pAbc->tAliases  = st__init_table(strcmp, st__strhash);
     pAbc->tFlags    = st__init_table(strcmp, st__strhash);
@@ -92,18 +92,18 @@ void Cmd_Init( Abc_Frame_t * pAbc )
     Cmd_CommandAdd( pAbc, "Basic", "source",        CmdCommandSource,          0 );
     Cmd_CommandAdd( pAbc, "Basic", "set",           CmdCommandSetVariable,     0 );
     Cmd_CommandAdd( pAbc, "Basic", "unset",         CmdCommandUnsetVariable,   0 );
-    Cmd_CommandAdd( pAbc, "Basic", "undo",          CmdCommandUndo,            0 ); 
-    Cmd_CommandAdd( pAbc, "Basic", "recall",        CmdCommandRecall,          0 ); 
-    Cmd_CommandAdd( pAbc, "Basic", "empty",         CmdCommandEmpty,           0 ); 
+    Cmd_CommandAdd( pAbc, "Basic", "undo",          CmdCommandUndo,            0 );
+    Cmd_CommandAdd( pAbc, "Basic", "recall",        CmdCommandRecall,          0 );
+    Cmd_CommandAdd( pAbc, "Basic", "empty",         CmdCommandEmpty,           0 );
 #if defined(WIN32) && !defined(__cplusplus)
     Cmd_CommandAdd( pAbc, "Basic", "ls",            CmdCommandLs,              0 );
     Cmd_CommandAdd( pAbc, "Basic", "scrgen",        CmdCommandScrGen,          0 );
 #endif
-    Cmd_CommandAdd( pAbc, "Basic", "version",       CmdCommandVersion,         0 ); 
+    Cmd_CommandAdd( pAbc, "Basic", "version",       CmdCommandVersion,         0 );
 
-    Cmd_CommandAdd( pAbc, "Various", "sis",         CmdCommandSis,             1 ); 
-    Cmd_CommandAdd( pAbc, "Various", "mvsis",       CmdCommandMvsis,           1 ); 
-    Cmd_CommandAdd( pAbc, "Various", "capo",        CmdCommandCapo,            0 ); 
+    Cmd_CommandAdd( pAbc, "Various", "sis",         CmdCommandSis,             1 );
+    Cmd_CommandAdd( pAbc, "Various", "mvsis",       CmdCommandMvsis,           1 );
+    Cmd_CommandAdd( pAbc, "Various", "capo",        CmdCommandCapo,            0 );
     Cmd_CommandAdd( pAbc, "Various", "starter",     CmdCommandStarter,         0 );
 
     Cmd_CommandAdd( pAbc, "Various", "load_plugin", Cmd_CommandAbcLoadPlugIn,  0 );
@@ -193,7 +193,7 @@ int CmdCommandTime( Abc_Frame_t * pAbc, int argc, char **argv )
 
 
     pAbc->TimeTotal += pAbc->TimeCommand;
-    fprintf( pAbc->Out, "elapse: %3.2f seconds, total: %3.2f seconds\n", 
+    fprintf( pAbc->Out, "elapse: %3.2f seconds, total: %3.2f seconds\n",
         pAbc->TimeCommand, pAbc->TimeTotal );
 /*
     {
@@ -229,16 +229,16 @@ int CmdCommandEcho( Abc_Frame_t * pAbc, int argc, char **argv )
 {
     int i;
     int c;
-	int n = 1;
+    int n = 1;
 
     Extra_UtilGetoptReset();
     while ( ( c = Extra_UtilGetopt( argc, argv, "hn" ) ) != EOF )
     {
         switch ( c )
         {
-		case 'n':
-			n = 0;
-			break;
+        case 'n':
+            n = 0;
+            break;
         case 'h':
             goto usage;
             break;
@@ -247,12 +247,20 @@ int CmdCommandEcho( Abc_Frame_t * pAbc, int argc, char **argv )
         }
     }
 
-    for ( i = globalUtilOptind; i < argc; i++ )
-        fprintf( pAbc->Out, "%s ", argv[i] );
-	if ( n )
-    	fprintf( pAbc->Out, "\n" );
-	else
-		fflush ( pAbc->Out );
+    if (pAbc->Out == stdout){
+        for ( i = globalUtilOptind; i < argc; i++ )
+            Abc_Print( 1, "%s ", argv[i] );
+        if ( n )
+            Abc_Print( 1, "\n" );
+
+    }else{
+        for ( i = globalUtilOptind; i < argc; i++ )
+            fprintf( pAbc->Out, "%s ", argv[i] );
+        if ( n )
+            fprintf( pAbc->Out, "\n" );
+
+        fflush ( pAbc->Out );
+    }
     return 0;
 
   usage:
@@ -371,7 +379,7 @@ int CmdCommandHistory( Abc_Frame_t * pAbc, int argc, char **argv )
         fprintf( pAbc->Out, "%s", (char *)Vec_PtrEntry(pAbc->aHistory, Vec_PtrSize(pAbc->aHistory)-1-iRepeat) );
     else if ( nPrints > 0 )
         Vec_PtrForEachEntryStart( char *, pAbc->aHistory, pName, i, Abc_MaxInt(0, Vec_PtrSize(pAbc->aHistory)-nPrints) )
-	        fprintf( pAbc->Out, "%2d : %s\n", Vec_PtrSize(pAbc->aHistory)-i, pName );
+            fprintf( pAbc->Out, "%2d : %s\n", Vec_PtrSize(pAbc->aHistory)-i, pName );
     return 0;
 
 usage:
@@ -427,7 +435,7 @@ int CmdCommandAlias( Abc_Frame_t * pAbc, int argc, char **argv )
         return 0;
     }
 
-    // delete any existing alias 
+    // delete any existing alias
     key = argv[1];
     if ( st__delete( pAbc->tAliases, &key, &value ) )
         CmdCommandAliasFree( ( Abc_Alias * ) value );
@@ -900,7 +908,7 @@ int CmdCommandUndo( Abc_Frame_t * pAbc, int argc, char **argv )
 
     // if there are no arguments on the command line
     // set the current network to be the network from the previous step
-    if ( argc == 1 ) 
+    if ( argc == 1 )
         return CmdCommandRecall( pAbc, argc, argv );
 
     fprintf( pAbc->Err, "usage: undo\n" );
@@ -934,7 +942,7 @@ int CmdCommandRecall( Abc_Frame_t * pAbc, int argc, char **argv )
         return 0;
     }
 
-    
+
     Extra_UtilGetoptReset();
     while ( ( c = Extra_UtilGetopt( argc, argv, "h" ) ) != EOF )
     {
@@ -946,18 +954,18 @@ int CmdCommandRecall( Abc_Frame_t * pAbc, int argc, char **argv )
                 goto usage;
         }
     }
- 
+
     // get the number of networks to save
     pValue = Cmd_FlagReadByName( pAbc, "savesteps" );
     // if the value of steps to save is not set, assume 1-level undo
     if ( pValue == NULL )
         nNetsToSave = 1;
-    else 
+    else
         nNetsToSave = atoi(pValue);
 
     // if there are no arguments on the command line
     // set the current network to be the network from the previous step
-    if ( argc == 1 ) 
+    if ( argc == 1 )
     {
         // get the previously saved network
         pNtk = Abc_NtkBackup(pAbc->pNtkCur);
@@ -989,13 +997,13 @@ int CmdCommandRecall( Abc_Frame_t * pAbc, int argc, char **argv )
             fprintf( pAbc->Out, "Cannot recall step %d.\n", iStep );
         else if ( iStep == 0 )
             Abc_FrameDeleteAllNetworks( pAbc );
-        else 
+        else
         {
             // scroll backward through the list of networks
             // to determine if such a network exist
             iStepFound = 0;
             for ( pNtk = pAbc->pNtkCur; pNtk; pNtk = Abc_NtkBackup(pNtk) )
-                if ( (iStepFound = Abc_NtkStep(pNtk)) == iStep ) 
+                if ( (iStepFound = Abc_NtkStep(pNtk)) == iStep )
                     break;
             if ( pNtk == NULL )
             {
@@ -1058,7 +1066,7 @@ int CmdCommandEmpty( Abc_Frame_t * pAbc, int argc, char **argv )
                 goto usage;
         }
     }
- 
+
     Abc_FrameDeleteAllNetworks( pAbc );
     Abc_FrameRestart( pAbc );
     return 0;
@@ -1101,16 +1109,16 @@ int CmdCommandUndo( Abc_Frame_t * pAbc, int argc, char **argv )
         }
     }
     if (globalUtilOptind <= argc) {
-	pNtkTemp = pAbc->pNtk;
-	pAbc->pNtk = pAbc->pNtkSaved;
-	pAbc->pNtkSaved = pNtkTemp;
+    pNtkTemp = pAbc->pNtk;
+    pAbc->pNtk = pAbc->pNtkSaved;
+    pAbc->pNtkSaved = pNtkTemp;
     }
     id = atoi(argv[globalUtilOptind]);
     pNtkTemp = Cmd_HistoryGetSnapshot(pAbc, id);
-    if (!pNtkTemp) 
-	fprintf( pAbc->Err, "Snapshot %d does not exist\n", id);
+    if (!pNtkTemp)
+    fprintf( pAbc->Err, "Snapshot %d does not exist\n", id);
     else
-	pAbc->pNtk = Abc_NtkDup(pNtkTemp, Abc_NtkMan(pNtkTemp));
+    pAbc->pNtk = Abc_NtkDup(pNtkTemp, Abc_NtkMan(pNtkTemp));
 
     return 0;
 usage:
@@ -1130,8 +1138,8 @@ typedef unsigned long _fsize_t; // Could be 64 bits for Win32
 
 struct _finddata_t {
     unsigned    attrib;
-    time_t      time_create;    // -1 for FAT file systems 
-    time_t      time_access;    // -1 for FAT file systems 
+    time_t      time_create;    // -1 for FAT file systems
+    time_t      time_access;    // -1 for FAT file systems
     time_t      time_write;
     _fsize_t    size;
     char        name[260];
@@ -1149,7 +1157,7 @@ extern int  _findclose( long handle );
   Synopsis    [Command to print the contents of the current directory (Windows).]
 
   Description []
-               
+
   SideEffects []
 
   SeeAlso     []
@@ -1157,93 +1165,93 @@ extern int  _findclose( long handle );
 ***********************************************************************/
 int CmdCommandLs( Abc_Frame_t * pAbc, int argc, char **argv )
 {
-	struct _finddata_t c_file;
-	long   hFile;
-	int    fLong = 0;
-	int    fOnlyBLIF = 0;
-	char   Buffer[25];
-	int    Counter = 0;
-	int    fPrintedNewLine;
+    struct _finddata_t c_file;
+    long   hFile;
+    int    fLong = 0;
+    int    fOnlyBLIF = 0;
+    char   Buffer[25];
+    int    Counter = 0;
+    int    fPrintedNewLine;
     char   c;
 
-	Extra_UtilGetoptReset();
-	while ( (c = Extra_UtilGetopt(argc, argv, "lb") ) != EOF )
-	{
-		switch (c)
-		{
-			case 'l':
-			  fLong = 1;
-			  break;
-			case 'b':
-			  fOnlyBLIF = 1;
-			  break;
-			default:
-			  goto usage;
-		}
-	}
+    Extra_UtilGetoptReset();
+    while ( (c = Extra_UtilGetopt(argc, argv, "lb") ) != EOF )
+    {
+        switch (c)
+        {
+            case 'l':
+              fLong = 1;
+              break;
+            case 'b':
+              fOnlyBLIF = 1;
+              break;
+            default:
+              goto usage;
+        }
+    }
 
-	// find first .mv file in current directory
-	if( (hFile = _findfirst( ((fOnlyBLIF)? "*.mv": "*.*"), &c_file )) == -1L )
-	{
-		if ( fOnlyBLIF )
-			fprintf( pAbc->Out, "No *.mv files in the current directory.\n" );
-		else
-			fprintf( pAbc->Out, "No files in the current directory.\n" );
-	}
-	else
-	{
-		if ( fLong )
-		{
-			fprintf( pAbc->Out, " File              Date           Size |  File             Date           Size \n" );
-			fprintf( pAbc->Out, " ----------------------------------------------------------------------------- \n" );
-			do
-			{
-				strcpy( Buffer, ctime( &(c_file.time_write) ) );
-				Buffer[16] = 0;
-				fprintf( pAbc->Out, " %-17s %.24s%7ld", c_file.name, Buffer+4, c_file.size );
-				if ( ++Counter % 2 == 0 )
-				{
-					fprintf( pAbc->Out, "\n" );
-					fPrintedNewLine = 1;
-				}
-				else
-				{
-					fprintf( pAbc->Out, " |" );
-					fPrintedNewLine = 0;
-				}
-			}
-			while( _findnext( hFile, &c_file ) == 0 );
-		}
-		else
-		{
-			do
-			{
-				fprintf( pAbc->Out, " %-18s", c_file.name );
-				if ( ++Counter % 4 == 0 )
-				{
-					fprintf( pAbc->Out, "\n" );
-					fPrintedNewLine = 1;
-				}
-				else
-				{
-					fprintf( pAbc->Out, " " );
-					fPrintedNewLine = 0;
-				}
-			}
-			while( _findnext( hFile, &c_file ) == 0 );
-		}
-		if ( !fPrintedNewLine )
-			fprintf( pAbc->Out, "\n" );
-		_findclose( hFile );
-	}
-	return 0;
+    // find first .mv file in current directory
+    if( (hFile = _findfirst( ((fOnlyBLIF)? "*.mv": "*.*"), &c_file )) == -1L )
+    {
+        if ( fOnlyBLIF )
+            fprintf( pAbc->Out, "No *.mv files in the current directory.\n" );
+        else
+            fprintf( pAbc->Out, "No files in the current directory.\n" );
+    }
+    else
+    {
+        if ( fLong )
+        {
+            fprintf( pAbc->Out, " File              Date           Size |  File             Date           Size \n" );
+            fprintf( pAbc->Out, " ----------------------------------------------------------------------------- \n" );
+            do
+            {
+                strcpy( Buffer, ctime( &(c_file.time_write) ) );
+                Buffer[16] = 0;
+                fprintf( pAbc->Out, " %-17s %.24s%7ld", c_file.name, Buffer+4, c_file.size );
+                if ( ++Counter % 2 == 0 )
+                {
+                    fprintf( pAbc->Out, "\n" );
+                    fPrintedNewLine = 1;
+                }
+                else
+                {
+                    fprintf( pAbc->Out, " |" );
+                    fPrintedNewLine = 0;
+                }
+            }
+            while( _findnext( hFile, &c_file ) == 0 );
+        }
+        else
+        {
+            do
+            {
+                fprintf( pAbc->Out, " %-18s", c_file.name );
+                if ( ++Counter % 4 == 0 )
+                {
+                    fprintf( pAbc->Out, "\n" );
+                    fPrintedNewLine = 1;
+                }
+                else
+                {
+                    fprintf( pAbc->Out, " " );
+                    fPrintedNewLine = 0;
+                }
+            }
+            while( _findnext( hFile, &c_file ) == 0 );
+        }
+        if ( !fPrintedNewLine )
+            fprintf( pAbc->Out, "\n" );
+        _findclose( hFile );
+    }
+    return 0;
 
 usage:
-	fprintf( pAbc->Err, "usage: ls [-l] [-b]\n" );
-	fprintf( pAbc->Err, "       print the file names in the current directory\n" );
-	fprintf( pAbc->Err, "        -l : print in the long format [default = short]\n" );
-	fprintf( pAbc->Err, "        -b : print only .mv files [default = all]\n" );
-	return 1; 
+    fprintf( pAbc->Err, "usage: ls [-l] [-b]\n" );
+    fprintf( pAbc->Err, "       print the file names in the current directory\n" );
+    fprintf( pAbc->Err, "        -l : print in the long format [default = short]\n" );
+    fprintf( pAbc->Err, "        -b : print only .mv files [default = all]\n" );
+    return 1;
 }
 
 
@@ -1252,7 +1260,7 @@ usage:
   Synopsis    [Generates the script for running ABC.]
 
   Description []
-               
+
   SideEffects []
 
   SeeAlso     []
@@ -1260,25 +1268,25 @@ usage:
 ***********************************************************************/
 int CmdCommandScrGen( Abc_Frame_t * pAbc, int argc, char **argv )
 {
-	struct _finddata_t c_file;
-	long   hFile;
+    struct _finddata_t c_file;
+    long   hFile;
     FILE * pFile = NULL;
     char * pFileStr = "test.s";
     char * pDirStr = NULL;
     char * pComStr = "ps";
     char * pWriteStr = NULL;
-	char   Buffer[1000], Line[2000];
+    char   Buffer[1000], Line[2000];
     int    nFileNameMax, nFileNameCur;
-	int    Counter = 0;
+    int    Counter = 0;
     int    fUseCurrent;
     char   c;
 
     fUseCurrent = 0;
-	Extra_UtilGetoptReset();
-	while ( (c = Extra_UtilGetopt(argc, argv, "FDCWch") ) != EOF )
-	{
-		switch (c)
-		{
+    Extra_UtilGetoptReset();
+    while ( (c = Extra_UtilGetopt(argc, argv, "FDCWch") ) != EOF )
+    {
+        switch (c)
+        {
         case 'F':
             if ( globalUtilOptind >= argc )
             {
@@ -1315,13 +1323,13 @@ int CmdCommandScrGen( Abc_Frame_t * pAbc, int argc, char **argv )
             pWriteStr = argv[globalUtilOptind];
             globalUtilOptind++;
             break;
-		case 'c':
-			fUseCurrent ^= 1;
-			break;
-		default:
-			goto usage;
-		}
-	}
+        case 'c':
+            fUseCurrent ^= 1;
+            break;
+        default:
+            goto usage;
+        }
+    }
 
 //    printf( "File = %s.\n", pFileStr );
 //    printf( "Dir = %s.\n", pDirStr );
@@ -1357,8 +1365,8 @@ int CmdCommandScrGen( Abc_Frame_t * pAbc, int argc, char **argv )
         return 0;
     }
 
-	// find the first file in the directory
-	if( (hFile = _findfirst( "*.*", &c_file )) == -1L )
+    // find the first file in the directory
+    if( (hFile = _findfirst( "*.*", &c_file )) == -1L )
     {
         if ( pDirStr )
             printf( "No files in the current directory.\n" );
@@ -1374,32 +1382,32 @@ int CmdCommandScrGen( Abc_Frame_t * pAbc, int argc, char **argv )
     // get the longest file name
     {
         nFileNameMax = 0;
-		do
-		{
+        do
+        {
             // skip script and txt files
             nFileNameCur = strlen(c_file.name);
             if ( c_file.name[nFileNameCur-1] == '.' )
                 continue;
             if ( nFileNameCur > 2 &&
-                 c_file.name[nFileNameCur-1] == 's' && 
-                 c_file.name[nFileNameCur-2] == '.' ) 
+                 c_file.name[nFileNameCur-1] == 's' &&
+                 c_file.name[nFileNameCur-2] == '.' )
                  continue;
             if ( nFileNameCur > 4 &&
-                 c_file.name[nFileNameCur-1] == 't' && 
-                 c_file.name[nFileNameCur-2] == 'x' && 
-                 c_file.name[nFileNameCur-3] == 't' && 
-                 c_file.name[nFileNameCur-4] == '.' ) 
+                 c_file.name[nFileNameCur-1] == 't' &&
+                 c_file.name[nFileNameCur-2] == 'x' &&
+                 c_file.name[nFileNameCur-3] == 't' &&
+                 c_file.name[nFileNameCur-4] == '.' )
                  continue;
             if ( nFileNameMax < nFileNameCur )
                 nFileNameMax = nFileNameCur;
         }
-		while( _findnext( hFile, &c_file ) == 0 );
-		_findclose( hFile );
+        while( _findnext( hFile, &c_file ) == 0 );
+        _findclose( hFile );
     }
 
     // print the script file
     {
-	    if( (hFile = _findfirst( "*.*", &c_file )) == -1L )
+        if( (hFile = _findfirst( "*.*", &c_file )) == -1L )
         {
             if ( pDirStr )
                 printf( "No files in the current directory.\n" );
@@ -1407,23 +1415,23 @@ int CmdCommandScrGen( Abc_Frame_t * pAbc, int argc, char **argv )
                 printf( "No files in directory: %s\n", pDirStr );
         }
         fprintf( pFile, "# Script file produced by ABC on %s\n", Extra_TimeStamp() );
-        fprintf( pFile, "# Command line was: scrgen -F %s -D %s -C \"%s\"%s%s\n", 
+        fprintf( pFile, "# Command line was: scrgen -F %s -D %s -C \"%s\"%s%s\n",
             pFileStr, pDirStr, pComStr, pWriteStr?" -W ":"", pWriteStr?pWriteStr:"" );
         do
-		{
+        {
             // skip script and txt files
             nFileNameCur = strlen(c_file.name);
             if ( c_file.name[nFileNameCur-1] == '.' )
                 continue;
             if ( nFileNameCur > 2 &&
-                 c_file.name[nFileNameCur-1] == 's' && 
-                 c_file.name[nFileNameCur-2] == '.' ) 
+                 c_file.name[nFileNameCur-1] == 's' &&
+                 c_file.name[nFileNameCur-2] == '.' )
                  continue;
             if ( nFileNameCur > 4 &&
-                 c_file.name[nFileNameCur-1] == 't' && 
-                 c_file.name[nFileNameCur-2] == 'x' && 
-                 c_file.name[nFileNameCur-3] == 't' && 
-                 c_file.name[nFileNameCur-4] == '.' ) 
+                 c_file.name[nFileNameCur-1] == 't' &&
+                 c_file.name[nFileNameCur-2] == 'x' &&
+                 c_file.name[nFileNameCur-3] == 't' &&
+                 c_file.name[nFileNameCur-4] == '.' )
                  continue;
             sprintf( Line, "r %s%s%-*s ; %s", pDirStr?pDirStr:"", pDirStr?"/":"", nFileNameMax, c_file.name, pComStr );
             for ( c = (int)strlen(Line)-1; c >= 0; c-- )
@@ -1440,8 +1448,8 @@ int CmdCommandScrGen( Abc_Frame_t * pAbc, int argc, char **argv )
             }
             fprintf( pFile, "\n", Line );
         }
-		while( _findnext( hFile, &c_file ) == 0 );
-		_findclose( hFile );
+        while( _findnext( hFile, &c_file ) == 0 );
+        _findclose( hFile );
     }
     fclose( pFile );
     if ( pDirStr && _chdir(Buffer) )
@@ -1455,19 +1463,19 @@ int CmdCommandScrGen( Abc_Frame_t * pAbc, int argc, char **argv )
         printf( "Script file \"%s\" was saved in the current directory.\n", pFileStr );
     else
         printf( "Script file \"%s\" was saved in directory: %s\n", pFileStr, pDirStr );
-	return 0;
+    return 0;
 
 usage:
-	fprintf( pAbc->Err, "usage: scrgen -F <str> -D <str> -C <str> -W <str> -ch\n" );
-	fprintf( pAbc->Err, "\t          generates script for running ABC\n" );
-	fprintf( pAbc->Err, "\t-F str  : the name of the script file [default = \"test.s\"]\n" );
-	fprintf( pAbc->Err, "\t-D str  : the directory to read files from [default = current]\n" );
-	fprintf( pAbc->Err, "\t-C str  : the sequence of commands to run [default = \"ps\"]\n" );
-	fprintf( pAbc->Err, "\t-W str  : the directory to write the resulting files [default = no writing]\n" );
+    fprintf( pAbc->Err, "usage: scrgen -F <str> -D <str> -C <str> -W <str> -ch\n" );
+    fprintf( pAbc->Err, "\t          generates script for running ABC\n" );
+    fprintf( pAbc->Err, "\t-F str  : the name of the script file [default = \"test.s\"]\n" );
+    fprintf( pAbc->Err, "\t-D str  : the directory to read files from [default = current]\n" );
+    fprintf( pAbc->Err, "\t-C str  : the sequence of commands to run [default = \"ps\"]\n" );
+    fprintf( pAbc->Err, "\t-W str  : the directory to write the resulting files [default = no writing]\n" );
     fprintf( pAbc->Err, "\t-c      : toggle placing file in current/target dir [default = %s]\n", fUseCurrent? "current": "target" );
     fprintf( pAbc->Err, "\t-h      : print the command usage\n\n");
     fprintf( pAbc->Err, "\tExample : scrgen -F test1.s -D a/in -C \"ps; st; ps\" -W a/out\n" );
-	return 1; 
+    return 1;
 }
 #endif
 
@@ -1606,16 +1614,16 @@ int CmdCommandSis( Abc_Frame_t * pAbc, int argc, char **argv )
     return 0;
 
 usage:
-	fprintf( pErr, "\n" );
-	fprintf( pErr, "Usage: sis [-h] <com>\n");
-	fprintf( pErr, "         invokes SIS command for the current ABC network\n" );
-	fprintf( pErr, "         (the executable of SIS should be in the same directory)\n" );
+    fprintf( pErr, "\n" );
+    fprintf( pErr, "Usage: sis [-h] <com>\n");
+    fprintf( pErr, "         invokes SIS command for the current ABC network\n" );
+    fprintf( pErr, "         (the executable of SIS should be in the same directory)\n" );
     fprintf( pErr, "   -h  : print the command usage\n" );
-	fprintf( pErr, " <com> : a SIS command (or a semicolon-separated list of commands in quotes)\n" );
+    fprintf( pErr, " <com> : a SIS command (or a semicolon-separated list of commands in quotes)\n" );
     fprintf( pErr, "         Example 1: sis eliminate 0\n" );
     fprintf( pErr, "         Example 2: sis \"ps; rd; fx; ps\"\n" );
     fprintf( pErr, "         Example 3: sis source script.rugged\n" );
-	return 1;					// error exit 
+    return 1;                   // error exit
 }
 
 
@@ -1749,16 +1757,16 @@ int CmdCommandMvsis( Abc_Frame_t * pAbc, int argc, char **argv )
     return 0;
 
 usage:
-	fprintf( pErr, "\n" );
-	fprintf( pErr, "Usage: mvsis [-h] <com>\n");
-	fprintf( pErr, "         invokes MVSIS command for the current ABC network\n" );
-	fprintf( pErr, "         (the executable of MVSIS should be in the same directory)\n" );
+    fprintf( pErr, "\n" );
+    fprintf( pErr, "Usage: mvsis [-h] <com>\n");
+    fprintf( pErr, "         invokes MVSIS command for the current ABC network\n" );
+    fprintf( pErr, "         (the executable of MVSIS should be in the same directory)\n" );
     fprintf( pErr, "   -h  : print the command usage\n" );
-	fprintf( pErr, " <com> : a MVSIS command (or a semicolon-separated list of commands in quotes)\n" );
+    fprintf( pErr, " <com> : a MVSIS command (or a semicolon-separated list of commands in quotes)\n" );
     fprintf( pErr, "         Example 1: mvsis fraig_sweep\n" );
     fprintf( pErr, "         Example 2: mvsis \"ps; fxu; ps\"\n" );
     fprintf( pErr, "         Example 3: mvsis source mvsis.rugged\n" );
-	return 1;					// error exit 
+    return 1;                   // error exit
 }
 
 
@@ -1767,7 +1775,7 @@ usage:
   Synopsis    [Computes dimentions of the graph.]
 
   Description []
-               
+
   SideEffects []
 
   SeeAlso     []
@@ -1992,13 +2000,13 @@ int CmdCommandCapo( Abc_Frame_t * pAbc, int argc, char **argv )
     return 0;
 
 usage:
-	fprintf( pErr, "\n" );
-	fprintf( pErr, "Usage: capo [-h] <com>\n");
-	fprintf( pErr, "         peforms placement of the current network using Capo\n" );
-	fprintf( pErr, "         a Capo binary should be present in the same directory\n" );
-	fprintf( pErr, "         (if plotting, the Gnuplot binary should also be present)\n" );
+    fprintf( pErr, "\n" );
+    fprintf( pErr, "Usage: capo [-h] <com>\n");
+    fprintf( pErr, "         peforms placement of the current network using Capo\n" );
+    fprintf( pErr, "         a Capo binary should be present in the same directory\n" );
+    fprintf( pErr, "         (if plotting, the Gnuplot binary should also be present)\n" );
     fprintf( pErr, "   -h  : print the command usage\n" );
-	fprintf( pErr, " <com> : a Capo command\n" );
+    fprintf( pErr, " <com> : a Capo command\n" );
     fprintf( pErr, "         Example 1: capo\n" );
     fprintf( pErr, "                    (performs placement with default options)\n" );
     fprintf( pErr, "         Example 2: capo -AR <aspec_ratio> -WS <whitespace_percentage> -save\n" );
@@ -2010,7 +2018,7 @@ usage:
     fprintf( pErr, "                    (prints the default usage message of the Capo binary)\n" );
     fprintf( pErr, "         Please refer to the Capo webpage for additional information:\n" );
     fprintf( pErr, "         http://vlsicad.eecs.umich.edu/BK/PDtools/\n" );
-	return 1;					// error exit 
+    return 1;                   // error exit
 }
 
 /**Function*************************************************************
@@ -2122,4 +2130,3 @@ int CmdCommandVersion( Abc_Frame_t * pAbc, int argc, char **argv )
 
 
 ABC_NAMESPACE_IMPL_END
-
