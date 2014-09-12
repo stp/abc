@@ -73,7 +73,7 @@ void Wlc_Init( Abc_Frame_t * pAbc )
 ******************************************************************************/
 void Wlc_End( Abc_Frame_t * pAbc )
 {
-	Wlc_AbcFreeNtk( pAbc );
+    Wlc_AbcFreeNtk( pAbc );
 }
 
 
@@ -125,7 +125,7 @@ int Abc_CommandReadVer( Abc_Frame_t * pAbc, int argc, char ** argv )
     }
     fclose( pFile );
 
-	// perform reading
+    // perform reading
     pNtk = Wlc_ReadVer( pFileName );
     Wlc_AbcUpdateNtk( pAbc, pNtk );
     return 0;
@@ -150,7 +150,7 @@ usage:
 ******************************************************************************/
 int Abc_CommandWriteVer( Abc_Frame_t * pAbc, int argc, char ** argv )
 {
-	Wlc_Ntk_t * pNtk = Wlc_AbcGetNtk(pAbc);
+    Wlc_Ntk_t * pNtk = Wlc_AbcGetNtk(pAbc);
     char * pFileName = NULL;
     int c, fVerbose  =    0;
     Extra_UtilGetoptReset();
@@ -205,7 +205,7 @@ usage:
 ******************************************************************************/
 int Abc_CommandPs( Abc_Frame_t * pAbc, int argc, char ** argv )
 {
-	Wlc_Ntk_t * pNtk = Wlc_AbcGetNtk(pAbc);
+    Wlc_Ntk_t * pNtk = Wlc_AbcGetNtk(pAbc);
     int fShowMulti   = 0;
     int fShowAdder   = 0;
     int c, fVerbose  = 0;
@@ -235,10 +235,10 @@ int Abc_CommandPs( Abc_Frame_t * pAbc, int argc, char ** argv )
         return 0;
     }
     Wlc_NtkPrintStats( pNtk, fVerbose );
-	if ( fShowMulti )
-		Wlc_NtkPrintNodes( pNtk, WLC_OBJ_ARI_MULTI );
-	if ( fShowAdder )
-		Wlc_NtkPrintNodes( pNtk, WLC_OBJ_ARI_ADD );
+    if ( fShowMulti )
+        Wlc_NtkPrintNodes( pNtk, WLC_OBJ_ARI_MULTI );
+    if ( fShowAdder )
+        Wlc_NtkPrintNodes( pNtk, WLC_OBJ_ARI_ADD );
     return 0;
 usage:
     Abc_Print( -2, "usage: %%ps [-mavh]\n" );
@@ -263,8 +263,8 @@ usage:
 ******************************************************************************/
 int Abc_CommandBlast( Abc_Frame_t * pAbc, int argc, char ** argv )
 {
-	Wlc_Ntk_t * pNtk = Wlc_AbcGetNtk(pAbc);
-	Gia_Man_t * pNew = NULL;
+    Wlc_Ntk_t * pNtk = Wlc_AbcGetNtk(pAbc);
+    Gia_Man_t * pNew = NULL;
     int c, fVerbose  = 0;
     Extra_UtilGetoptReset();
     while ( ( c = Extra_UtilGetopt( argc, argv, "vh" ) ) != EOF )
@@ -287,12 +287,12 @@ int Abc_CommandBlast( Abc_Frame_t * pAbc, int argc, char ** argv )
     }
     // transform
     pNew = Wlc_NtkBitBlast( pNtk );
-	if ( pNew == NULL )
-	{
+    if ( pNew == NULL )
+    {
         Abc_Print( 1, "Abc_CommandBlast(): Bit-blasting has failed.\n" );
         return 0;
-	}
-	Abc_FrameUpdateGia( pAbc, pNew );
+    }
+    Abc_FrameUpdateGia( pAbc, pNew );
     return 0;
 usage:
     Abc_Print( -2, "usage: %%blast [-vh]\n" );

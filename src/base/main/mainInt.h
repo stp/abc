@@ -71,7 +71,7 @@ struct Abc_Frame_t_
     int             nSteps;        // the counter of different network processed
     int             fSource;       // marks the source mode
     int             fAutoexac;     // marks the autoexec mode
-	int				fBatchMode;	   // batch mode flag
+    int             fBatchMode;    // batch mode flag
     int             fBridgeMode;   // bridge mode flag
     // output streams
     FILE *          Out;
@@ -117,7 +117,7 @@ struct Abc_Frame_t_
     int             Status;                // the status of verification problem (proved=1, disproved=0, undecided=-1)
     int             nFrames;               // the number of time frames completed by BMC
     Vec_Ptr_t *     vPlugInComBinPairs;    // pairs of command and its binary name
-	Vec_Ptr_t *     vLTLProperties_global; // related to LTL
+    Vec_Ptr_t *     vLTLProperties_global; // related to LTL
     void *          pSave1; 
     void *          pSave2; 
     void *          pSave3; 
@@ -126,7 +126,7 @@ struct Abc_Frame_t_
     void *          pAbc85Ntl2;
     void *          pAbc85Best;
     void *          pAbc85Delay;
-	void *          pAbcWlc;
+    void *          pAbcWlc;
 
     EXT_ABC_FRAME   // plugin for external functionality
 };

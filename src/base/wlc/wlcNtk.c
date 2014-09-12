@@ -52,7 +52,7 @@ Wlc_Ntk_t * Wlc_NtkAlloc( char * pName, int nObjsAlloc )
     Vec_IntGrow( &p->vCis, 111 );
     Vec_IntGrow( &p->vCos, 111 );
     Vec_IntGrow( &p->vFfs, 111 );
-	p->pMemFanin = Mem_FlexStart();
+    p->pMemFanin = Mem_FlexStart();
     p->nObjsAlloc = nObjsAlloc;  
     p->pObjs = ABC_CALLOC( Wlc_Obj_t, p->nObjsAlloc );
     p->iObj = 1;
@@ -73,15 +73,15 @@ int Wlc_ObjAlloc( Wlc_Ntk_t * p, int Type, int Signed, int End, int Beg )
     pObj->End    = End;
     pObj->Beg    = Beg;
     if ( Type == WLC_OBJ_PI )
-	{
-		pObj->Fanins[1] = Vec_IntSize(&p->vPis);
+    {
+        pObj->Fanins[1] = Vec_IntSize(&p->vPis);
         Vec_IntPush( &p->vPis, p->iObj );
-	}
+    }
     else if ( Type == WLC_OBJ_PO )
-	{
-		pObj->Fanins[1] = Vec_IntSize(&p->vPos);
+    {
+        pObj->Fanins[1] = Vec_IntSize(&p->vPos);
         Vec_IntPush( &p->vPos, p->iObj );
-	}
+    }
     p->nObjs[Type]++;
     return p->iObj++;
 }
@@ -111,7 +111,7 @@ void Wlc_ObjAddFanins( Wlc_Ntk_t * p, Wlc_Obj_t * pObj, Vec_Int_t * vFanins )
     if ( Wlc_ObjHasArray(pObj) )
         pObj->pFanins[0] = (int *)Mem_FlexEntryFetch( p->pMemFanin, Vec_IntSize(vFanins) * sizeof(int) );
     memcpy( Wlc_ObjFanins(pObj), Vec_IntArray(vFanins), sizeof(int) * Vec_IntSize(vFanins) );
-	// special treatment of CONST and SELECT
+    // special treatment of CONST and SELECT
     if ( pObj->Type == WLC_OBJ_CONST )
         pObj->nFanins = 0;
     else if ( pObj->Type == WLC_OBJ_BIT_SELECT )
@@ -121,8 +121,8 @@ void Wlc_NtkFree( Wlc_Ntk_t * p )
 {
     if ( p->pManName )
         Abc_NamStop( p->pManName );
-	if ( p->pMemFanin )
-		Mem_FlexStop( p->pMemFanin, 0 );
+    if ( p->pMemFanin )
+        Mem_FlexStop( p->pMemFanin, 0 );
     ABC_FREE( p->vPis.pArray );
     ABC_FREE( p->vPos.pArray );
     ABC_FREE( p->vCis.pArray );
@@ -144,8 +144,8 @@ int Wlc_NtkMemUsage( Wlc_Ntk_t * p )
     Mem += 4 * p->vCos.nCap;
     Mem += 4 * p->vFfs.nCap;
     Mem += sizeof(Wlc_Obj_t) * p->nObjsAlloc;
-	Mem += Abc_NamMemUsed(p->pManName);
-	Mem += Mem_FlexReadMemUsage(p->pMemFanin);
+    Mem += Abc_NamMemUsed(p->pManName);
+    Mem += Mem_FlexReadMemUsage(p->pMemFanin);
     return Mem;
 }
 void Wlc_NtkPrintNodes( Wlc_Ntk_t * p, int Type )
@@ -179,9 +179,9 @@ void Wlc_NtkPrintStats( Wlc_Ntk_t * p, int fVerbose )
     printf( "Obj = %6d  ",     Wlc_NtkObjNum(p) );
     printf( "Mem = %.3f MB",   1.0*Wlc_NtkMemUsage(p)/(1<<20) );
     printf( "\n" );
-	if ( !fVerbose )
-		return;
-	printf( "Node type statisticts:\n" );
+    if ( !fVerbose )
+        return;
+    printf( "Node type statisticts:\n" );
     for ( i = 0; i < WLC_OBJ_NUMBER; i++ )
         if ( p->nObjs[i] )
             printf( "%2d  :  %6d  %-8s\n", i, p->nObjs[i], Wlc_Names[i] );
@@ -206,19 +206,19 @@ void Wlc_ObjCollectCopyFanins( Wlc_Ntk_t * p, int iObj, Vec_Int_t * vFanins )
     Vec_IntClear( vFanins );
     Wlc_ObjForEachFanin( pObj, iFanin, i )
         Vec_IntPush( vFanins, Wlc_ObjCopy(p, iFanin) );
-	// special treatment of CONST and SELECT
-	if ( pObj->Type == WLC_OBJ_CONST )
-	{
-		int * pInts = Wlc_ObjConstValue( pObj );
-		int nInts = Abc_BitWordNum( Wlc_ObjRange(pObj) );
-		for ( i = 0; i < nInts; i++ )
-			Vec_IntPush( vFanins, pInts[i] );
-	}
+    // special treatment of CONST and SELECT
+    if ( pObj->Type == WLC_OBJ_CONST )
+    {
+        int * pInts = Wlc_ObjConstValue( pObj );
+        int nInts = Abc_BitWordNum( Wlc_ObjRange(pObj) );
+        for ( i = 0; i < nInts; i++ )
+            Vec_IntPush( vFanins, pInts[i] );
+    }
     else if ( pObj->Type == WLC_OBJ_BIT_SELECT )
-	{
-		assert( Vec_IntSize(vFanins) == 1 );
-		Vec_IntPush( vFanins, pObj->Fanins[1] );
-	}
+    {
+        assert( Vec_IntSize(vFanins) == 1 );
+        Vec_IntPush( vFanins, pObj->Fanins[1] );
+    }
 }
 int Wlc_ObjDup( Wlc_Ntk_t * pNew, Wlc_Ntk_t * p, int iObj, Vec_Int_t * vFanins )
 {

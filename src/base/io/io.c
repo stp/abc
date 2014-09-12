@@ -242,7 +242,7 @@ int IoCommandRead( Abc_Frame_t * pAbc, int argc, char ** argv )
     }
     // replace the current network
     Abc_FrameReplaceCurrentNetwork( pAbc, pNtk );
-	Abc_FrameCopyLTLDataBase( pAbc, pNtk );
+    Abc_FrameCopyLTLDataBase( pAbc, pNtk );
     Abc_FrameClearVerifStatus( pAbc );
     return 0;
 
@@ -1568,20 +1568,20 @@ int IoCommandWriteBlif( Abc_Frame_t * pAbc, int argc, char **argv )
     {
         switch ( c )
         {
-		    case 'S':
+            case 'S':
                 if ( globalUtilOptind >= argc )
                 {
                     Abc_Print( -1, "Command line switch \"-S\" should be followed by string.\n" );
                     goto usage;
                 }
-			    pLutStruct = argv[globalUtilOptind];
-			    globalUtilOptind++;
-			    if ( strlen(pLutStruct) != 2 && strlen(pLutStruct) != 3 ) 
+                pLutStruct = argv[globalUtilOptind];
+                globalUtilOptind++;
+                if ( strlen(pLutStruct) != 2 && strlen(pLutStruct) != 3 ) 
                 {
                     Abc_Print( -1, "Command line switch \"-S\" should be followed by a 2- or 3-char string (e.g. \"44\" or \"555\").\n" );
                     goto usage;
                 }
-			    break;
+                break;
             case 'j':
                 fSpecial ^= 1;
                 break;
@@ -1748,7 +1748,7 @@ usage:
 int IoCommandWriteBook( Abc_Frame_t * pAbc, int argc, char **argv )
 {
     char * pFileName;
-		int c;
+        int c;
     Extra_UtilGetoptReset();
     while ( ( c = Extra_UtilGetopt( argc, argv, "h" ) ) != EOF )
     {
@@ -1764,7 +1764,7 @@ int IoCommandWriteBook( Abc_Frame_t * pAbc, int argc, char **argv )
         goto usage;
     // get the output file name
     pFileName = argv[globalUtilOptind];
-		// call the corresponding file writer
+        // call the corresponding file writer
     Io_Write( pAbc->pNtkCur, pFileName, IO_FILE_BOOK );
     return 0;
 

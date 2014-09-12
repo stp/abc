@@ -161,7 +161,7 @@ struct Wlc_Ntk_t_
     Wlc_Obj_t *            pObjs;
     int                    iObj;
     int                    nObjsAlloc;
-	Mem_Flex_t *           pMemFanin;
+    Mem_Flex_t *           pMemFanin;
     // object names
     Abc_Nam_t *            pManName;           // object names
     Vec_Int_t              vNameIds;           // object name IDs

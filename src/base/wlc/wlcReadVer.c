@@ -646,10 +646,10 @@ int Wlc_PrsDerive( Wlc_Prs_t * p )
         }
 //        else if ( Wlc_PrsStrCmp( pStart, "CPL_FF" ) )
         else
-		{
+        {
             pStart = Wlc_PrsFindName( pStart, &pName );
             return Wlc_PrsWriteErrorMessage( p, pStart, "Cannot read line beginning with %s.", pName );
-		}
+        }
     }
     return 1;
 }
