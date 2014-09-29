@@ -9106,10 +9106,10 @@ usage:
 ***********************************************************************/
 int Abc_CommandMoveNames( Abc_Frame_t * pAbc, int argc, char ** argv )
 {
-	extern void Abc_NtkMoveNames( Abc_Ntk_t * pNtk, Abc_Ntk_t * pOld );
+    extern void Abc_NtkMoveNames( Abc_Ntk_t * pNtk, Abc_Ntk_t * pOld );
     Abc_Ntk_t * pNtk = Abc_FrameReadNtk(pAbc);
-	Abc_Ntk_t * pNtk2;
-	char * FileName;
+    Abc_Ntk_t * pNtk2;
+    char * FileName;
     int c;
     // set defaults
     Extra_UtilGetoptReset();
@@ -15786,24 +15786,24 @@ int Abc_CommandDsdSave( Abc_Frame_t * pAbc, int argc, char ** argv )
     }
     // get the input file name
     FileName = (nArgcNew == 1) ? pArgvNew[0] : NULL;
-	if ( fSecond )
-	{
-		if ( !Abc_FrameReadManDsd2() )
-		{
-			Abc_Print( -1, "The DSD manager is not started.\n" );
-			return 1;
-		}
-		If_DsdManSave( (If_DsdMan_t *)Abc_FrameReadManDsd2(), FileName );
-	}
-	else
-	{
-		if ( !Abc_FrameReadManDsd() )
-		{
-			Abc_Print( -1, "The DSD manager is not started.\n" );
-			return 1;
-		}
-		If_DsdManSave( (If_DsdMan_t *)Abc_FrameReadManDsd(), FileName );
-	}
+    if ( fSecond )
+    {
+        if ( !Abc_FrameReadManDsd2() )
+        {
+            Abc_Print( -1, "The DSD manager is not started.\n" );
+            return 1;
+        }
+        If_DsdManSave( (If_DsdMan_t *)Abc_FrameReadManDsd2(), FileName );
+    }
+    else
+    {
+        if ( !Abc_FrameReadManDsd() )
+        {
+            Abc_Print( -1, "The DSD manager is not started.\n" );
+            return 1;
+        }
+        If_DsdManSave( (If_DsdMan_t *)Abc_FrameReadManDsd(), FileName );
+    }
     return 0;
 
 usage:
@@ -15869,22 +15869,22 @@ int Abc_CommandDsdLoad( Abc_Frame_t * pAbc, int argc, char ** argv )
         return 1;
     }
     fclose( pFile );
-	if ( fSecond )
-	{
-		Abc_FrameSetManDsd2( NULL );
-		pDsdMan = If_DsdManLoad(FileName);
-		if ( pDsdMan == NULL )
-			return 1;
-		Abc_FrameSetManDsd2( pDsdMan );
-	}
-	else
-	{
-		Abc_FrameSetManDsd( NULL );
-		pDsdMan = If_DsdManLoad(FileName);
-		if ( pDsdMan == NULL )
-			return 1;
-		Abc_FrameSetManDsd( pDsdMan );
-	}
+    if ( fSecond )
+    {
+        Abc_FrameSetManDsd2( NULL );
+        pDsdMan = If_DsdManLoad(FileName);
+        if ( pDsdMan == NULL )
+            return 1;
+        Abc_FrameSetManDsd2( pDsdMan );
+    }
+    else
+    {
+        Abc_FrameSetManDsd( NULL );
+        pDsdMan = If_DsdManLoad(FileName);
+        if ( pDsdMan == NULL )
+            return 1;
+        Abc_FrameSetManDsd( pDsdMan );
+    }
     return 0;
 
 usage:
@@ -15924,24 +15924,24 @@ int Abc_CommandDsdFree( Abc_Frame_t * pAbc, int argc, char ** argv )
             goto usage;
         }
     }
-	if ( fSecond )
-	{
-		if ( !Abc_FrameReadManDsd2() )
-		{
-			Abc_Print( -1, "The DSD manager is not started.\n" );
-			return 0;
-		}
-		Abc_FrameSetManDsd2( NULL );
-	}
-	else
-	{
-		if ( !Abc_FrameReadManDsd() )
-		{
-			Abc_Print( -1, "The DSD manager is not started.\n" );
-			return 0;
-		}
-		Abc_FrameSetManDsd( NULL );
-	}
+    if ( fSecond )
+    {
+        if ( !Abc_FrameReadManDsd2() )
+        {
+            Abc_Print( -1, "The DSD manager is not started.\n" );
+            return 0;
+        }
+        Abc_FrameSetManDsd2( NULL );
+    }
+    else
+    {
+        if ( !Abc_FrameReadManDsd() )
+        {
+            Abc_Print( -1, "The DSD manager is not started.\n" );
+            return 0;
+        }
+        Abc_FrameSetManDsd( NULL );
+    }
     return 0;
 
 usage:
@@ -16011,24 +16011,24 @@ int Abc_CommandDsdPs( Abc_Frame_t * pAbc, int argc, char ** argv )
             goto usage;
         }
     }
-	if ( fSecond )
-	{
-		if ( !Abc_FrameReadManDsd2() )
-		{
-			Abc_Print( -1, "The DSD manager is not started.\n" );
-			return 0;
-		}
-		If_DsdManPrint( (If_DsdMan_t *)Abc_FrameReadManDsd2(), NULL, Number, Support, fOccurs, fTtDump, fVerbose );
-	}
-	else
-	{
-		if ( !Abc_FrameReadManDsd() )
-		{
-			Abc_Print( -1, "The DSD manager is not started.\n" );
-			return 0;
-		}
-		If_DsdManPrint( (If_DsdMan_t *)Abc_FrameReadManDsd(), NULL, Number, Support, fOccurs, fTtDump, fVerbose );
-	}
+    if ( fSecond )
+    {
+        if ( !Abc_FrameReadManDsd2() )
+        {
+            Abc_Print( -1, "The DSD manager is not started.\n" );
+            return 0;
+        }
+        If_DsdManPrint( (If_DsdMan_t *)Abc_FrameReadManDsd2(), NULL, Number, Support, fOccurs, fTtDump, fVerbose );
+    }
+    else
+    {
+        if ( !Abc_FrameReadManDsd() )
+        {
+            Abc_Print( -1, "The DSD manager is not started.\n" );
+            return 0;
+        }
+        If_DsdManPrint( (If_DsdMan_t *)Abc_FrameReadManDsd(), NULL, Number, Support, fOccurs, fTtDump, fVerbose );
+    }
     return 0;
 
 usage:
@@ -28458,16 +28458,16 @@ int Abc_CommandAbc9Syn2( Abc_Frame_t * pAbc, int argc, char ** argv )
     {
         switch ( c )
         {
-		case 'R':
+        case 'R':
             if ( globalUtilOptind >= argc )
             {
                 Abc_Print( 1, "Command line switch \"-R\" should be followed by a floating point number.\n" );
                 return 0;
             }
-			nRelaxRatio = atoi(argv[globalUtilOptind]);
-			globalUtilOptind++;
-			if ( nRelaxRatio < 0 ) 
-				goto usage;
+            nRelaxRatio = atoi(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( nRelaxRatio < 0 ) 
+                goto usage;
             break;
         case 'a':
             fOldAlgo ^= 1;
@@ -30921,7 +30921,7 @@ usage:
 ***********************************************************************/
 int Abc_CommandAbc9Flow( Abc_Frame_t * pAbc, int argc, char ** argv )
 {
-	extern void Gia_ManPerformFlow( int fIsMapped, int nAnds, int nLevels, int nLutSize, int nCutNum, int fMinAve, int fVerbose );
+    extern void Gia_ManPerformFlow( int fIsMapped, int nAnds, int nLevels, int nLutSize, int nCutNum, int fMinAve, int fVerbose );
     int nLutSize    =  6;
     int nCutNum     =  8;
     int fMinAve     =  0;
@@ -30970,7 +30970,7 @@ int Abc_CommandAbc9Flow( Abc_Frame_t * pAbc, int argc, char ** argv )
         Abc_Print( -1, "Abc_CommandAbc9Flow(): There is no AIG.\n" );
         return 1;
     }
-	Gia_ManPerformFlow( Gia_ManHasMapping(pAbc->pGia), Gia_ManAndNum(pAbc->pGia), Gia_ManLevelNum(pAbc->pGia), nLutSize, nCutNum, fMinAve, fVerbose );
+    Gia_ManPerformFlow( Gia_ManHasMapping(pAbc->pGia), Gia_ManAndNum(pAbc->pGia), Gia_ManLevelNum(pAbc->pGia), nLutSize, nCutNum, fMinAve, fVerbose );
     return 0;
 
 usage:
@@ -30997,7 +30997,7 @@ usage:
 ***********************************************************************/
 int Abc_CommandAbc9Flow2( Abc_Frame_t * pAbc, int argc, char ** argv )
 {
-	extern void Gia_ManPerformFlow2( int fIsMapped, int nAnds, int nLevels, int nLutSize, int nCutNum, int fBalance, int fMinAve, int fUseMfs, int fVerbose );
+    extern void Gia_ManPerformFlow2( int fIsMapped, int nAnds, int nLevels, int nLutSize, int nCutNum, int fBalance, int fMinAve, int fUseMfs, int fVerbose );
     int nLutSize    =  6;
     int nCutNum     =  8;
     int fBalance    =  0;
@@ -31054,7 +31054,7 @@ int Abc_CommandAbc9Flow2( Abc_Frame_t * pAbc, int argc, char ** argv )
         Abc_Print( -1, "Abc_CommandAbc9Flow2(): There is no AIG.\n" );
         return 1;
     }
-	Gia_ManPerformFlow2( Gia_ManHasMapping(pAbc->pGia), Gia_ManAndNum(pAbc->pGia), Gia_ManLevelNum(pAbc->pGia), nLutSize, nCutNum, fBalance, fMinAve, fUseMfs, fVerbose );
+    Gia_ManPerformFlow2( Gia_ManHasMapping(pAbc->pGia), Gia_ManAndNum(pAbc->pGia), Gia_ManLevelNum(pAbc->pGia), nLutSize, nCutNum, fBalance, fMinAve, fUseMfs, fVerbose );
     return 0;
 
 usage:
@@ -31158,16 +31158,16 @@ int Abc_CommandAbc9If( Abc_Frame_t * pAbc, int argc, char ** argv )
             if ( pPars->nGateSize < 2 )
                 goto usage;
             break;
-		case 'R':
+        case 'R':
             if ( globalUtilOptind >= argc )
             {
                 Abc_Print( 1, "Command line switch \"-R\" should be followed by a floating point number.\n" );
                 return 0;
             }
-			pPars->nRelaxRatio = atoi(argv[globalUtilOptind]);
-			globalUtilOptind++;
-			if ( pPars->nRelaxRatio < 0 ) 
-				goto usage;
+            pPars->nRelaxRatio = atoi(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( pPars->nRelaxRatio < 0 ) 
+                goto usage;
             break;
         case 'D':
             if ( globalUtilOptind >= argc )
@@ -32222,38 +32222,38 @@ int Abc_CommandAbc9Lf( Abc_Frame_t * pAbc, int argc, char ** argv )
             if ( pPars->nRoundsEla < 0 )
                 goto usage;
             break;
-		case 'R':
+        case 'R':
             if ( globalUtilOptind >= argc )
             {
                 Abc_Print( 1, "Command line switch \"-R\" should be followed by a floating point number.\n" );
                 return 0;
             }
-			pPars->nRelaxRatio = atoi(argv[globalUtilOptind]);
-			globalUtilOptind++;
-			if ( pPars->nRelaxRatio < 0 ) 
-				goto usage;
+            pPars->nRelaxRatio = atoi(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( pPars->nRelaxRatio < 0 ) 
+                goto usage;
             break;
-		case 'L':
+        case 'L':
             if ( globalUtilOptind >= argc )
             {
                 Abc_Print( 1, "Command line switch \"-R\" should be followed by a floating point number.\n" );
                 return 0;
             }
-			pPars->nCoarseLimit = atoi(argv[globalUtilOptind]);
-			globalUtilOptind++;
-			if ( pPars->nCoarseLimit < 0 ) 
-				goto usage;
+            pPars->nCoarseLimit = atoi(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( pPars->nCoarseLimit < 0 ) 
+                goto usage;
             break;
-		case 'E':
+        case 'E':
             if ( globalUtilOptind >= argc )
             {
                 Abc_Print( 1, "Command line switch \"-E\" should be followed by a floating point number.\n" );
                 return 0;
             }
-			pPars->nAreaTuner = atoi(argv[globalUtilOptind]);
-			globalUtilOptind++;
-			if ( pPars->nAreaTuner < 0 ) 
-				goto usage;
+            pPars->nAreaTuner = atoi(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( pPars->nAreaTuner < 0 ) 
+                goto usage;
             break;
         case 'D':
             if ( globalUtilOptind >= argc )
@@ -32454,38 +32454,38 @@ int Abc_CommandAbc9Mf( Abc_Frame_t * pAbc, int argc, char ** argv )
             if ( pPars->nRoundsEla < 0 )
                 goto usage;
             break;
-		case 'R':
+        case 'R':
             if ( globalUtilOptind >= argc )
             {
                 Abc_Print( 1, "Command line switch \"-R\" should be followed by a floating point number.\n" );
                 return 0;
             }
-			pPars->nRelaxRatio = atoi(argv[globalUtilOptind]);
-			globalUtilOptind++;
-			if ( pPars->nRelaxRatio < 0 ) 
-				goto usage;
+            pPars->nRelaxRatio = atoi(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( pPars->nRelaxRatio < 0 ) 
+                goto usage;
             break;
-		case 'L':
+        case 'L':
             if ( globalUtilOptind >= argc )
             {
                 Abc_Print( 1, "Command line switch \"-R\" should be followed by a floating point number.\n" );
                 return 0;
             }
-			pPars->nCoarseLimit = atoi(argv[globalUtilOptind]);
-			globalUtilOptind++;
-			if ( pPars->nCoarseLimit < 0 ) 
-				goto usage;
+            pPars->nCoarseLimit = atoi(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( pPars->nCoarseLimit < 0 ) 
+                goto usage;
             break;
-		case 'E':
+        case 'E':
             if ( globalUtilOptind >= argc )
             {
                 Abc_Print( 1, "Command line switch \"-E\" should be followed by a floating point number.\n" );
                 return 0;
             }
-			pPars->nAreaTuner = atoi(argv[globalUtilOptind]);
-			globalUtilOptind++;
-			if ( pPars->nAreaTuner < 0 ) 
-				goto usage;
+            pPars->nAreaTuner = atoi(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( pPars->nAreaTuner < 0 ) 
+                goto usage;
             break;
         case 'D':
             if ( globalUtilOptind >= argc )
@@ -32657,38 +32657,38 @@ int Abc_CommandAbc9Nf( Abc_Frame_t * pAbc, int argc, char ** argv )
             if ( pPars->nRoundsEla < 0 )
                 goto usage;
             break;
-		case 'R':
+        case 'R':
             if ( globalUtilOptind >= argc )
             {
                 Abc_Print( 1, "Command line switch \"-R\" should be followed by a floating point number.\n" );
                 return 0;
             }
-			pPars->nRelaxRatio = atoi(argv[globalUtilOptind]);
-			globalUtilOptind++;
-			if ( pPars->nRelaxRatio < 0 ) 
-				goto usage;
+            pPars->nRelaxRatio = atoi(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( pPars->nRelaxRatio < 0 ) 
+                goto usage;
             break;
-		case 'L':
+        case 'L':
             if ( globalUtilOptind >= argc )
             {
                 Abc_Print( 1, "Command line switch \"-R\" should be followed by a floating point number.\n" );
                 return 0;
             }
-			pPars->nCoarseLimit = atoi(argv[globalUtilOptind]);
-			globalUtilOptind++;
-			if ( pPars->nCoarseLimit < 0 ) 
-				goto usage;
+            pPars->nCoarseLimit = atoi(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( pPars->nCoarseLimit < 0 ) 
+                goto usage;
             break;
-		case 'E':
+        case 'E':
             if ( globalUtilOptind >= argc )
             {
                 Abc_Print( 1, "Command line switch \"-E\" should be followed by a floating point number.\n" );
                 return 0;
             }
-			pPars->nAreaTuner = atoi(argv[globalUtilOptind]);
-			globalUtilOptind++;
-			if ( pPars->nAreaTuner < 0 ) 
-				goto usage;
+            pPars->nAreaTuner = atoi(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( pPars->nAreaTuner < 0 ) 
+                goto usage;
             break;
         case 'D':
             if ( globalUtilOptind >= argc )
@@ -32805,8 +32805,8 @@ int Abc_CommandAbc9Unmap( Abc_Frame_t * pAbc, int argc, char ** argv )
         Abc_Print( -1, "Abc_CommandAbc9Struct(): There is no AIG to map.\n" );
         return 1;
     }
-	Vec_IntFreeP( &pAbc->pGia->vMapping );
-	Vec_IntFreeP( &pAbc->pGia->vPacking );
+    Vec_IntFreeP( &pAbc->pGia->vMapping );
+    Vec_IntFreeP( &pAbc->pGia->vPacking );
     return 0;
 
 usage:
