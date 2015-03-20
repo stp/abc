@@ -249,12 +249,14 @@ opt/lpk/lpkMap.c
 opt/lpk/lpkMulti.c
 opt/lpk/lpkMux.c
 opt/lpk/lpkSets.c
-opt/fsim/fsimCore.c
-opt/fsim/fsimFront.c
+
+# opt/fsim/fsimCore.c
+# opt/fsim/fsimFront.c
 # opt/fsim/fsimMan.c
 # opt/fsim/fsimSim.c
-opt/fsim/fsimSwitch.c
-opt/fsim/fsimTsim.c
+# opt/fsim/fsimSwitch.c
+# opt/fsim/fsimTsim.c
+
 opt/mfs/mfsCore.c
 opt/mfs/mfsDiv.c
 opt/mfs/mfsInter.c
@@ -286,19 +288,21 @@ map/scl/sclLoad.c
 map/scl/sclSize.c
 map/scl/sclUpsize.c
 map/scl/sclUtil.c
-map/fpga/fpga.c
-map/fpga/fpgaCore.c
-map/fpga/fpgaCreate.c
-map/fpga/fpgaCut.c
-map/fpga/fpgaCutUtils.c
-map/fpga/fpgaFanout.c
-map/fpga/fpgaLib.c
-map/fpga/fpgaMatch.c
-map/fpga/fpgaSwitch.c
-map/fpga/fpgaTime.c
-map/fpga/fpgaTruth.c
-map/fpga/fpgaUtils.c
-map/fpga/fpgaVec.c
+
+# map/fpga/fpga.c
+# map/fpga/fpgaCore.c
+# map/fpga/fpgaCreate.c
+# map/fpga/fpgaCut.c
+# map/fpga/fpgaCutUtils.c
+# map/fpga/fpgaFanout.c
+# map/fpga/fpgaLib.c
+# map/fpga/fpgaMatch.c
+# map/fpga/fpgaSwitch.c
+# map/fpga/fpgaTime.c
+# map/fpga/fpgaTruth.c
+# map/fpga/fpgaUtils.c
+# map/fpga/fpgaVec.c
+
 map/amap/amapCore.c
 map/amap/amapGraph.c
 map/amap/amapLib.c
@@ -618,45 +622,47 @@ misc/tim/timTrav.c
 
 misc/st/st.c
 misc/st/stmm.c
-misc/espresso/cofactor.c
-misc/espresso/cols.c
-misc/espresso/compl.c
-misc/espresso/contain.c
-misc/espresso/cubehack.c
-misc/espresso/cubestr.c
-misc/espresso/cvrin.c
-misc/espresso/cvrm.c
-misc/espresso/cvrmisc.c
-misc/espresso/cvrout.c
-misc/espresso/dominate.c
-misc/espresso/equiv.c
-misc/espresso/espresso.c
-misc/espresso/essen.c
-misc/espresso/exact.c
-misc/espresso/expand.c
-misc/espresso/gasp.c
-misc/espresso/gimpel.c
-misc/espresso/globals.c
-misc/espresso/hack.c
-misc/espresso/indep.c
-misc/espresso/irred.c
-misc/espresso/map.c
-misc/espresso/matrix.c
-misc/espresso/mincov.c
-misc/espresso/opo.c
-misc/espresso/pair.c
-misc/espresso/part.c
-misc/espresso/primes.c
-misc/espresso/reduce.c
-misc/espresso/rows.c
-misc/espresso/set.c
-misc/espresso/setc.c
-misc/espresso/sharp.c
-misc/espresso/sminterf.c
-misc/espresso/solution.c
-misc/espresso/sparse.c
-misc/espresso/unate.c
-misc/espresso/verify.c
+
+# misc/espresso/cofactor.c
+# misc/espresso/cols.c
+# misc/espresso/compl.c
+# misc/espresso/contain.c
+# misc/espresso/cubehack.c
+# misc/espresso/cubestr.c
+# misc/espresso/cvrin.c
+# misc/espresso/cvrm.c
+# misc/espresso/cvrmisc.c
+# misc/espresso/cvrout.c
+# misc/espresso/dominate.c
+# misc/espresso/equiv.c
+# misc/espresso/espresso.c
+# misc/espresso/essen.c
+# misc/espresso/exact.c
+# misc/espresso/expand.c
+# misc/espresso/gasp.c
+# misc/espresso/gimpel.c
+# misc/espresso/globals.c
+# misc/espresso/hack.c
+# misc/espresso/indep.c
+# misc/espresso/irred.c
+# misc/espresso/map.c
+# misc/espresso/matrix.c
+# misc/espresso/mincov.c
+# misc/espresso/opo.c
+# misc/espresso/pair.c
+# misc/espresso/part.c
+# misc/espresso/primes.c
+# misc/espresso/reduce.c
+# misc/espresso/rows.c
+# misc/espresso/set.c
+# misc/espresso/setc.c
+# misc/espresso/sharp.c
+# misc/espresso/sminterf.c
+# misc/espresso/solution.c
+# misc/espresso/sparse.c
+# misc/espresso/unate.c
+# misc/espresso/verify.c
+
 misc/extra/extraBddAuto.c
 misc/extra/extraBddCas.c
 misc/extra/extraBddImage.c
@@ -869,16 +875,18 @@ base/cmd/cmdLoad.c
 base/cmd/cmdPlugin.c
 base/cmd/cmdStarter.c
 base/cmd/cmdUtils.c
-phys/place/place_base.c
-phys/place/place_bin.c
-phys/place/place_genqp.c
-phys/place/place_gordian.c
-phys/place/place_legalize.c
-phys/place/place_pads.c
-phys/place/place_partition.c
-phys/place/place_qpsolver.c
-phys/place/place_io.c
-phys/place/place_inc.c
+
+# phys/place/place_base.c
+# phys/place/place_bin.c
+# phys/place/place_genqp.c
+# phys/place/place_gordian.c
+# phys/place/place_legalize.c
+# phys/place/place_pads.c
+# phys/place/place_partition.c
+# phys/place/place_qpsolver.c
+# phys/place/place_io.c
+# phys/place/place_inc.c
+
 proof/abs/absDup.c
 proof/abs/absGla.c
 proof/abs/absGlaOld.c
@@ -1020,14 +1028,21 @@ proof/dch/dchSat.c
 proof/dch/dchSim.c
 proof/dch/dchSimSat.c
 proof/dch/dchSweep.c
-proof/int2/int2Bmc.c
-proof/int2/int2Core.c
-proof/int2/int2Refine.c
-proof/int2/int2Util.c
+
+# proof/int2/int2Bmc.c
+# proof/int2/int2Core.c
+# proof/int2/int2Refine.c
+# proof/int2/int2Util.c
+
 proof/bbr/bbrCex.c
 proof/bbr/bbrImage.c
 proof/bbr/bbrNtbdd.c
 proof/bbr/bbrReach.c
+)
+
+target_link_libraries(abc
+  pthread
+  dl
 )
 
 
