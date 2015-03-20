@@ -51,5 +51,5 @@ endif()
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unused-but-set-variable")
 
-add_definitions(-DLIN64)
+add_definitions(-DLIN64 -DSIZEOF_VOID_P=8 -DSIZEOF_LONG=8 -DSIZEOF_INT=4)
 add_subdirectory(src)
