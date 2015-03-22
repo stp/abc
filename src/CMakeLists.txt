@@ -1044,7 +1044,12 @@ set(abc_lib_objects
   proof/bbr/bbrReach.c
 )
 
-set(abc_public_headers "")
+set(abc_public_headers
+  aig/aig/aig.h
+  opt/dar/dar.h
+  base/abc/abc.h
+  sat/cnf/cnf.h
+)
 add_library(libabc ${abc_lib_objects})
 
 set_target_properties(libabc PROPERTIES
