@@ -1,6 +1,9 @@
 include_directories(.)
 
-add_library(libabc
+set(abc_lib_objects "")
+
+set(abc_lib_objects
+  ${abc_lib_objects}
   sat/bsat2/AbcApi.cpp
   sat/bsat2/MainSat.cpp
   sat/bsat2/MainSimp.cpp
@@ -1041,15 +1044,62 @@ add_library(libabc
   proof/bbr/bbrReach.c
 )
 
-target_link_libraries(libabc
-  dl
+set(abc_public_headers "")
+add_library(libabc ${abc_lib_objects})
+
+set_target_properties(libabc PROPERTIES
+  OUTPUT_NAME abc
+  PUBLIC_HEADER "${abc_public_headers}"
 )
+
+# -----------------------------------------------------------------------------
+# Support building both static and dynamic library
+# -----------------------------------------------------------------------------
+if (BUILD_SHARED_LIBS AND ALSO_BUILD_STATIC_LIB)
+  add_library(libabc_static STATIC ${abc_lib_objects})
+
+  set_target_properties(libabc_static PROPERTIES
+    OUTPUT_NAME abc
+  )
+
+  install(TARGETS libabc_static
+    EXPORT ${ABC_EXPORT_NAME}
+    LIBRARY DESTINATION "${CMAKE_INSTALL_PREFIX}/lib"
+    ARCHIVE DESTINATION "${CMAKE_INSTALL_PREFIX}/lib"
+  )
+endif()
+
+set(libabc_link_libs dl)
+target_link_libraries(libabc ${libabc_link_libs})
+
+install(TARGETS libabc
+  EXPORT ${ABC_EXPORT_NAME}
+  LIBRARY DESTINATION "${CMAKE_INSTALL_PREFIX}/lib"
+  ARCHIVE DESTINATION "${CMAKE_INSTALL_PREFIX}/lib"
+  PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_PREFIX}/include/abc"
+)
+
+if (BUILD_STATIC_BIN)
+    # FIXME: We should check if the linker supports these flags
+    # FIXME: -Wl,--no-export-dynamic is a workaround for a bug in binutils
+    # See http://sourceware.org/bugzilla/show_bug.cgi?id=13490
+    # https://bugzilla.redhat.com/show_bug.cgi?id=642999
+    set(CMAKE_EXE_LINKER_FLAGS "-static -Wl,--no-export-dynamic")
+endif()
 
 add_executable(abc
   base/main/main.c
 )
 
-target_link_libraries(abc
-  pthread
-  libabc
+if (BUILD_STATIC_BIN)
+    set_target_properties(abc PROPERTIES LINK_SEARCH_END_STATIC 1)
+    set_target_properties(abc PROPERTIES LINK_SEARCH_START_STATIC 0)
+endif()
+
+set_target_properties(abc PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
+target_link_libraries(abc libabc pthread)
+
+install(TARGETS abc
+  EXPORT ${ABC_EXPORT_NAME}
+  RUNTIME DESTINATION bin
 )
