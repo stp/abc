@@ -1,0 +1,9 @@
+abc_add_module(misc_bzlib
+  blocksort.c
+  bzlib.c
+  compress.c
+  crctable.c
+  decompress.c
+  huffman.c
+  randtable.c
+)

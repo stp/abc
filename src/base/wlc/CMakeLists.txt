@@ -1,0 +1,11 @@
+abc_add_module(base_wlc
+  wlcAbs.c
+  wlcBlast.c
+  wlcCom.c
+  wlcNtk.c
+  wlcReadSmt.c
+  wlcReadVer.c
+  wlcSim.c
+  wlcStdin.c
+  wlcWriteVer.c
+)

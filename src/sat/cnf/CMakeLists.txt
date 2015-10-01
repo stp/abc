@@ -1,0 +1,11 @@
+abc_add_module(sat_cnf
+  cnfCore.c
+  cnfCut.c
+  cnfData.c
+  cnfFast.c
+  cnfMan.c
+  cnfMap.c
+  cnfPost.c
+  cnfUtil.c
+  cnfWrite.c
+)

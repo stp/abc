@@ -1,0 +1,9 @@
+abc_add_module(sat_bsat2
+  AbcApi.cpp
+  MainSat.cpp
+  MainSimp.cpp
+  Options.cpp
+  SimpSolver.cpp
+  Solver.cpp
+  System.cpp
+)

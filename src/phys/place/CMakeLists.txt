@@ -1,0 +1,12 @@
+abc_add_module(phys_place
+  place_base.c
+  place_bin.c
+  place_genqp.c
+  place_gordian.c
+  place_legalize.c
+  place_pads.c
+  place_partition.c
+  place_qpsolver.c
+  place_io.c
+  place_inc.c
+)

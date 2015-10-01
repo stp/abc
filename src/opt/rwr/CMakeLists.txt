@@ -1,0 +1,9 @@
+abc_add_module(opt_rwr
+  rwrDec.c
+  rwrEva.c
+  rwrExp.c
+  rwrLib.c
+  rwrMan.c
+  rwrPrint.c
+  rwrUtil.c
+)

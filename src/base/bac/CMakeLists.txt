@@ -1,0 +1,17 @@
+abc_add_module(base_bac
+  bacBlast.c
+  bacBac.c
+  bacCom.c
+  bacLib.c
+  bacNtk.c
+  bacPrsBuild.c
+  bacPrsTrans.c
+  bacPtr.c
+  bacPtrAbc.c
+  bacReadBlif.c
+  bacReadSmt.c
+  bacReadVer.c
+  bacWriteBlif.c
+  bacWriteSmt.c
+  bacWriteVer.c
+)

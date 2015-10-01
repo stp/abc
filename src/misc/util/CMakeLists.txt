@@ -1,0 +1,10 @@
+abc_add_module(misc_util
+  utilBridge.c
+  utilCex.c
+  utilColor.c
+  utilFile.c
+  utilIsop.c
+  utilNam.c
+  utilSignal.c
+  utilSort.c
+)

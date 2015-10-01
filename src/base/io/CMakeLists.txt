@@ -1,0 +1,31 @@
+abc_add_module(base_io
+  io.c
+  ioReadAiger.c
+  ioReadBaf.c
+  ioReadBblif.c
+  ioReadBench.c
+  ioReadBlif.c
+  ioReadBlifAig.c
+  ioReadBlifMv.c
+  ioReadDsd.c
+  ioReadEdif.c
+  ioReadEqn.c
+  ioReadPla.c
+  ioReadVerilog.c
+  ioUtil.c
+  ioWriteAiger.c
+  ioWriteBaf.c
+  ioWriteBblif.c
+  ioWriteBench.c
+  ioWriteBlif.c
+  ioWriteBlifMv.c
+  ioWriteBook.c
+  ioWriteCnf.c
+  ioWriteDot.c
+  ioWriteEqn.c
+  ioWriteGml.c
+  ioWriteList.c
+  ioWritePla.c
+  ioWriteVerilog.c
+  ioWriteSmv.c
+)

@@ -1,0 +1,14 @@
+abc_add_module(proof_fraig
+  fraigApi.c
+  fraigCanon.c
+  fraigFanout.c
+  fraigFeed.c
+  fraigMan.c
+  fraigMem.c
+  fraigNode.c
+  fraigPrime.c
+  fraigSat.c
+  fraigTable.c
+  fraigUtil.c
+  fraigVec.c
+)

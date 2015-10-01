@@ -1,0 +1,15 @@
+abc_add_module(map_amap
+  amapCore.c
+  amapGraph.c
+  amapLib.c
+  amapLiberty.c
+  amapMan.c
+  amapMatch.c
+  amapMerge.c
+  amapOutput.c
+  amapParse.c
+  amapPerm.c
+  amapRead.c
+  amapRule.c
+  amapUniq.c
+)

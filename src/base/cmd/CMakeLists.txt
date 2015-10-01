@@ -1,0 +1,11 @@
+abc_add_module(base_cmd
+  cmd.c
+  cmdAlias.c
+  cmdApi.c
+  cmdFlag.c
+  cmdHist.c
+  cmdLoad.c
+  cmdPlugin.c
+  cmdStarter.c
+  cmdUtils.c
+)

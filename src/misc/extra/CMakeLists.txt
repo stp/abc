@@ -1,0 +1,17 @@
+abc_add_module(misc_extra
+  extraUtilBitMatrix.c
+  extraUtilCanon.c
+  extraUtilCube.c
+  extraUtilDsd.c
+  extraUtilEnum.c
+  extraUtilFile.c
+  extraUtilMemory.c
+  extraUtilMisc.c
+  extraUtilPerm.c
+  extraUtilProgress.c
+  extraUtilReader.c
+  extraUtilSupp.c
+  extraUtilThresh.c
+  extraUtilTruth.c
+  extraUtilUtil.c
+)

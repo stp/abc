@@ -1,0 +1,24 @@
+abc_add_module(aig_ivy
+  ivyBalance.c
+  ivyCanon.c
+  ivyCheck.c
+  ivyCut.c
+  ivyCutTrav.c
+  ivyDfs.c
+  ivyDsd.c
+  ivyFanout.c
+  ivyFastMap.c
+  ivyFraig.c
+  ivyHaig.c
+  ivyMan.c
+  ivyMem.c
+  ivyMulti.c
+  ivyObj.c
+  ivyOper.c
+  ivyResyn.c
+  ivyRwr.c
+  ivySeq.c
+  ivyShow.c
+  ivyTable.c
+  ivyUtil.c
+)

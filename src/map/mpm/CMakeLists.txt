@@ -1,0 +1,13 @@
+abc_add_module(map_mpm
+  mpmAbc.c
+  mpmCore.c
+  mpmDsd.c
+  mpmGates.c
+  mpmLib.c
+  mpmMan.c
+  mpmMap.c
+  mpmMig.c
+  mpmPre.c
+  mpmTruth.c
+  mpmUtil.c
+)

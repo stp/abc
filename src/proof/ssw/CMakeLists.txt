@@ -1,0 +1,22 @@
+abc_add_module(proof_ssw
+  sswAig.c
+  sswBmc.c
+  sswClass.c
+  sswCnf.c
+  sswConstr.c
+  sswCore.c
+  sswDyn.c
+  sswFilter.c
+  sswIslands.c
+  sswLcorr.c
+  sswMan.c
+  sswPart.c
+  sswPairs.c
+  sswRarity.c
+  sswSat.c
+  sswSemi.c
+  sswSim.c
+  sswSimSat.c
+  sswSweep.c
+  sswUnique.c
+)

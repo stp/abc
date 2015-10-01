@@ -1,0 +1,14 @@
+abc_add_module(bool_kit
+  kitAig.c
+  kitBdd.c
+  kitCloud.c
+  cloud.c
+  kitDsd.c
+  kitFactor.c
+  kitGraph.c
+  kitHop.c
+  kitIsop.c
+  kitPla.c
+  kitSop.c
+  kitTruth.c
+)

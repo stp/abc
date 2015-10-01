@@ -1,0 +1,15 @@
+abc_add_module(sat_bsat
+  satMem.c
+  satInter.c
+  satInterA.c
+  satInterB.c
+  satInterP.c
+  satProof.c
+  satSolver.c
+  satSolver2.c
+  satSolver2i.c
+  satStore.c
+  satTrace.c
+  satTruth.c
+  satUtil.c
+)

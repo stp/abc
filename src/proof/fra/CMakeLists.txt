@@ -1,0 +1,19 @@
+abc_add_module(proof_fra
+  fraBmc.c
+  fraCec.c
+  fraClass.c
+  fraClau.c
+  fraClaus.c
+  fraCnf.c
+  fraCore.c
+  fraHot.c
+  fraImp.c
+  fraInd.c
+  fraIndVer.c
+  fraLcr.c
+  fraMan.c
+  fraPart.c
+  fraSat.c
+  fraSec.c
+  fraSim.c
+)

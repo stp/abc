@@ -1,0 +1,28 @@
+abc_add_module(aig_saig
+  saigCone.c
+  saigConstr.c
+  saigConstr2.c
+  saigDual.c
+  saigDup.c
+  saigInd.c
+  saigIoa.c
+  saigIso.c
+  saigIsoFast.c
+  saigIsoSlow.c
+  saigMiter.c
+  saigOutDec.c
+  saigPhase.c
+  saigRetFwd.c
+  saigRetMin.c
+  saigRetStep.c
+  saigScl.c
+  saigSimFast.c
+  saigSimMv.c
+  saigSimSeq.c
+  saigStrSim.c
+  saigSwitch.c
+  saigSynch.c
+  saigTempor.c
+  saigTrans.c
+  saigWnd.c
+)

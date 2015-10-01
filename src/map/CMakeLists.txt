@@ -1,0 +1,11 @@
+add_subdirectory(amap)
+add_subdirectory(cov)
+# FIXME: Dead?
+#add_subdirectory(fpga)
+add_subdirectory(if)
+add_subdirectory(mapper)
+add_subdirectory(mio)
+add_subdirectory(mpm)
+add_subdirectory(scl)
+add_subdirectory(super)
+abc_module_propagate()

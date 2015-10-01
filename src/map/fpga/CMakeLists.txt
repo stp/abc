@@ -1,0 +1,15 @@
+abc_add_module(map_fpga
+  fpga.c
+  fpgaCore.c
+  fpgaCreate.c
+  fpgaCut.c
+  fpgaCutUtils.c
+  fpgaFanout.c
+  fpgaLib.c
+  fpgaMatch.c
+  fpgaSwitch.c
+  fpgaTime.c
+  fpgaTruth.c
+  fpgaUtils.c
+  fpgaVec.c
+)

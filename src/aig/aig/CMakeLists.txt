@@ -1,0 +1,33 @@
+abc_add_module(aig_aig
+  aigCheck.c
+  aigCanon.c
+  aigCuts.c
+  aigDfs.c
+  aigDup.c
+  aigFanout.c
+  aigFrames.c
+  aigInter.c
+  aigJust.c
+  aigMan.c
+  aigMem.c
+  aigMffc.c
+  aigObj.c
+  aigOper.c
+  aigOrder.c
+  aigPack.c
+  aigPart.c
+  aigPartReg.c
+  aigPartSat.c
+  aigRepr.c
+  aigRet.c
+  aigRetF.c
+  aigScl.c
+  aigShow.c
+  aigSplit.c
+  aigTable.c
+  aigTiming.c
+  aigTruth.c
+  aigTsim.c
+  aigUtil.c
+  aigWin.c
+)

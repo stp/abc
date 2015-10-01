@@ -1,0 +1,10 @@
+abc_add_module(bdd_extrab
+  extraBddAuto.c
+  extraBddCas.c
+  extraBddImage.c
+  extraBddKmap.c
+  extraBddMisc.c
+  extraBddSymm.c
+  extraBddTime.c
+  extraBddUnate.c
+)

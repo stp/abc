@@ -1,0 +1,10 @@
+abc_add_module(opt_mfs
+  mfsCore.c
+  mfsDiv.c
+  mfsInter.c
+  mfsMan.c
+  mfsResub.c
+  mfsSat.c
+  mfsStrash.c
+  mfsWin.c
+)

@@ -1,0 +1,10 @@
+abc_add_module(base_pla
+  plaCom.c
+  plaHash.c
+  plaFxch.c
+  plaMan.c
+  plaMerge.c
+  plaSimple.c
+  plaRead.c
+  plaWrite.c
+)

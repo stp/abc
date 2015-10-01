@@ -1,0 +1,10 @@
+abc_add_module(base_cba
+  cbaBlast.c
+  cbaCba.c
+  cbaCom.c
+  cbaNtk.c
+  cbaReadBlif.c
+  cbaReadVer.c
+  cbaWriteBlif.c
+  cbaWriteVer.c
+)

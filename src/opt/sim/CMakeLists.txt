@@ -1,0 +1,11 @@
+abc_add_module(opt_sim
+  simMan.c
+  simSeq.c
+  simSupp.c
+  simSwitch.c
+  simSym.c
+  simSymSat.c
+  simSymSim.c
+  simSymStr.c
+  simUtils.c
+)

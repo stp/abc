@@ -1,0 +1,28 @@
+abc_add_module(map_if
+  ifCom.c
+  ifCache.c
+  ifCore.c
+  ifCut.c
+  ifData2.c
+  ifDec07.c
+  ifDec08.c
+  ifDec10.c
+  ifDec16.c
+  ifDec75.c
+  ifDelay.c
+  ifDsd.c
+  ifLibBox.c
+  ifLibLut.c
+  ifMan.c
+  ifMap.c
+  ifMatch2.c
+  ifReduce.c
+  ifSat.c
+  ifSelect.c
+  ifSeq.c
+  ifTest.c
+  ifTime.c
+  ifTruth.c
+  ifTune.c
+  ifUtil.c
+)

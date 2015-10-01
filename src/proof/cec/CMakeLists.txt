@@ -1,0 +1,15 @@
+abc_add_module(proof_cec
+  cecCec.c
+  cecChoice.c
+  cecClass.c
+  cecCore.c
+  cecCorr.c
+  cecIso.c
+  cecMan.c
+  cecPat.c
+  cecSeq.c
+  cecSolve.c
+  cecSplit.c
+  cecSynth.c
+  cecSweep.c
+)

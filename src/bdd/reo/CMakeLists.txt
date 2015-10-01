@@ -1,0 +1,10 @@
+abc_add_module(bdd_reo
+  reoApi.c
+  reoCore.c
+  reoProfile.c
+  reoShuffle.c
+  reoSift.c
+  reoSwap.c
+  reoTransfer.c
+  reoUnits.c
+)

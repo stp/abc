@@ -1,0 +1,8 @@
+add_subdirectory(bdc)
+add_subdirectory(dec)
+add_subdirectory(deco)
+add_subdirectory(kit)
+add_subdirectory(lucky)
+add_subdirectory(rpo)
+add_subdirectory(rsb)
+abc_module_propagate()

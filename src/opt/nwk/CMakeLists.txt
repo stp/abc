@@ -1,0 +1,16 @@
+abc_add_module(opt_nwk
+  nwkAig.c
+  nwkCheck.c
+  nwkBidec.c
+  nwkDfs.c
+  nwkFanio.c
+  nwkFlow.c
+  nwkMan.c
+  nwkMap.c
+  nwkMerge.c
+  nwkObj.c
+  nwkSpeedup.c
+  nwkStrash.c
+  nwkTiming.c
+  nwkUtil.c
+)

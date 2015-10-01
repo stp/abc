@@ -1,0 +1,17 @@
+abc_add_module(misc_mvc
+  mvcApi.c
+  mvcCompare.c
+  mvcContain.c
+  mvcCover.c
+  mvcCube.c
+  mvcDivide.c
+  mvcDivisor.c
+  mvcList.c
+  mvcLits.c
+  mvcMan.c
+  mvcOpAlg.c
+  mvcOpBool.c
+  mvcPrint.c
+  mvcSort.c
+  mvcUtils.c
+)

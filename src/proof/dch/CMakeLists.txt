@@ -1,0 +1,12 @@
+abc_add_module(proof_dch
+  dchAig.c
+  dchChoice.c
+  dchClass.c
+  dchCnf.c
+  dchCore.c
+  dchMan.c
+  dchSat.c
+  dchSim.c
+  dchSimSat.c
+  dchSweep.c
+)

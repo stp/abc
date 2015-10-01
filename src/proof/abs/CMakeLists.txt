@@ -1,0 +1,18 @@
+abc_add_module(proof_abs
+  absDup.c
+  absGla.c
+  absGlaOld.c
+  absIter.c
+  absOldCex.c
+  absOldRef.c
+  absOldSat.c
+  absOldSim.c
+  absOut.c
+  absPth.c
+  absRef.c
+  absRefSelect.c
+  absRpm.c
+  absRpmOld.c
+  absVta.c
+  absUtil.c
+)

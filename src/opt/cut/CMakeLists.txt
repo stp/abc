@@ -1,0 +1,11 @@
+abc_add_module(opt_cut
+  cutApi.c
+  cutCut.c
+  cutMan.c
+  cutMerge.c
+  cutNode.c
+  cutOracle.c
+  cutPre22.c
+  cutSeq.c
+  cutTruth.c
+)

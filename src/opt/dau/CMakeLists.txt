@@ -1,0 +1,11 @@
+abc_add_module(opt_dau
+  dauCanon.c
+  dauCore.c
+  dauDivs.c
+  dauDsd.c
+  dauEnum.c
+  dauGia.c
+  dauMerge.c
+  dauNonDsd.c
+  dauTree.c
+)

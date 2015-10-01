@@ -1,0 +1,12 @@
+abc_add_module(aig_hop
+  hopBalance.c
+  hopCheck.c
+  hopDfs.c
+  hopMan.c
+  hopMem.c
+  hopObj.c
+  hopOper.c
+  hopTable.c
+  hopTruth.c
+  hopUtil.c
+)

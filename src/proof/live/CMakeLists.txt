@@ -1,0 +1,11 @@
+abc_add_module(proof_live
+  liveness.c
+  liveness_sim.c
+  ltl_parser.c
+  kliveness.c
+  monotone.c
+  disjunctiveMonotone.c
+  arenaViolation.c
+  kLiveConstraints.c
+  combination.c
+)

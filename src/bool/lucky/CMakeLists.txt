@@ -1,0 +1,9 @@
+abc_add_module(bool_lucky
+  lucky.c
+  luckyFast16.c
+  luckyFast6.c
+  luckyRead.c
+  luckySimple.c
+  luckySwapIJ.c
+  luckySwap.c
+)

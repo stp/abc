@@ -1,0 +1,9 @@
+abc_add_module(opt_sfm
+  sfmCnf.c
+  sfmCore.c
+  sfmDec.c
+  sfmLib.c
+  sfmNtk.c
+  sfmSat.c
+  sfmWin.c
+)

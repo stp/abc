@@ -1,0 +1,13 @@
+abc_add_module(map_scl
+  scl.c
+  sclBuffer.c
+  sclBufSize.c
+  sclDnsize.c
+  sclLiberty.c
+  sclLibScl.c
+  sclLibUtil.c
+  sclLoad.c
+  sclSize.c
+  sclUpsize.c
+  sclUtil.c
+)

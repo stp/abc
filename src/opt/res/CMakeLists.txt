@@ -1,0 +1,9 @@
+abc_add_module(opt_res
+  resCore.c
+  resDivs.c
+  resFilter.c
+  resSat.c
+  resSim.c
+  resStrash.c
+  resWin.c
+)

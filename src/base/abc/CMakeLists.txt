@@ -1,0 +1,25 @@
+abc_add_module(base_abc
+  abcAig.c
+  abcBarBuf.c
+  abcBlifMv.c
+  abcCheck.c
+  abcDfs.c
+  abcFanio.c
+  abcFanOrder.c
+  abcFunc.c
+  abcHie.c
+  abcHieCec.c
+  abcHieGia.c
+  abcHieNew.c
+  abcLatch.c
+  abcLib.c
+  abcMinBase.c
+  abcNames.c
+  abcNetlist.c
+  abcNtk.c
+  abcObj.c
+  abcRefs.c
+  abcShow.c
+  abcSop.c
+  abcUtil.c
+)

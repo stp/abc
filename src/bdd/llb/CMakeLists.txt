@@ -1,0 +1,24 @@
+abc_add_module(bdd_llb
+  llb1Cluster.c
+  llb1Constr.c
+  llb1Core.c
+  llb1Group.c
+  llb1Hint.c
+  llb1Man.c
+  llb1Matrix.c
+  llb1Pivot.c
+  llb1Reach.c
+  llb1Sched.c
+  llb2Bad.c
+  llb2Core.c
+  llb2Driver.c
+  llb2Dump.c
+  llb2Flow.c
+  llb2Image.c
+  llb3Image.c
+  llb3Nonlin.c
+  llb4Cex.c
+  llb4Image.c
+  llb4Nonlin.c
+  llb4Sweep.c
+)

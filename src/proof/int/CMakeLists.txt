@@ -1,0 +1,12 @@
+abc_add_module(proof_int
+  intCheck.c
+  intContain.c
+  intCore.c
+  intCtrex.c
+  intDup.c
+  intFrames.c
+  intInter.c
+  intM114.c
+  intMan.c
+  intUtil.c
+)

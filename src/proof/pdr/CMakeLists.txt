@@ -1,0 +1,9 @@
+abc_add_module(proof_pdr
+  pdrCnf.c
+  pdrCore.c
+  pdrInv.c
+  pdrMan.c
+  pdrSat.c
+  pdrTsim.c
+  pdrUtil.c
+)

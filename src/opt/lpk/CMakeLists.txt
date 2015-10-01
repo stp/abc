@@ -1,0 +1,13 @@
+abc_add_module(opt_lpk
+  lpkCore.c
+  lpkAbcDec.c
+  lpkAbcMux.c
+  lpkAbcDsd.c
+  lpkAbcUtil.c
+  lpkCut.c
+  lpkMan.c
+  lpkMap.c
+  lpkMulti.c
+  lpkMux.c
+  lpkSets.c
+)

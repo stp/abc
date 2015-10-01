@@ -1,0 +1,9 @@
+abc_add_module(map_cov
+  covBuild.c
+  covCore.c
+  covMan.c
+  covMinEsop.c
+  covMinMan.c
+  covMinSop.c
+  covMinUtil.c
+)

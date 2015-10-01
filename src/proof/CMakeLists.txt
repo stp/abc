@@ -1,0 +1,13 @@
+add_subdirectory(abs)
+add_subdirectory(cec)
+add_subdirectory(dch)
+add_subdirectory(fra)
+add_subdirectory(fraig)
+add_subdirectory(int)
+# FIXME: Dead?
+#add_subdirectory(int2)
+add_subdirectory(live)
+add_subdirectory(pdr)
+add_subdirectory(ssc)
+add_subdirectory(ssw)
+abc_module_propagate()

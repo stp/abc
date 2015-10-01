@@ -1,0 +1,15 @@
+abc_add_module(sat_msat
+  msatActivity.c
+  msatClause.c
+  msatClauseVec.c
+  msatMem.c
+  msatOrderH.c
+  msatQueue.c
+  msatRead.c
+  msatSolverApi.c
+  msatSolverCore.c
+  msatSolverIo.c
+  msatSolverSearch.c
+  msatSort.c
+  msatVec.c
+)

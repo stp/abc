@@ -1,0 +1,25 @@
+abc_add_module(sat_bmc
+  bmcBCore.c
+  bmcBmc.c
+  bmcBmc2.c
+  bmcBmc3.c
+  bmcBmcAnd.c
+  bmcBmci.c
+  bmcCexCare.c
+  bmcCexCut.c
+  bmcCexDepth.c
+  bmcCexMin1.c
+  bmcCexMin2.c
+  bmcCexTools.c
+  bmcChain.c
+  bmcClp.c
+  bmcEco.c
+  bmcFault.c
+  bmcFx.c
+  bmcICheck.c
+  bmcInse.c
+  bmcLoad.c
+  bmcMaxi.c
+  bmcMulti.c
+  bmcUnroll.c
+)

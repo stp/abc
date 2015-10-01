@@ -1,0 +1,11 @@
+abc_add_module(opt_dar
+  darBalance.c
+  darCore.c
+  darCut.c
+  darData.c
+  darLib.c
+  darMan.c
+  darPrec.c
+  darRefact.c
+  darScript.c
+)

@@ -1,0 +1,19 @@
+abc_add_module(map_mapper
+  mapper.c
+  mapperCanon.c
+  mapperCore.c
+  mapperCreate.c
+  mapperCut.c
+  mapperCutUtils.c
+  mapperLib.c
+  mapperMatch.c
+  mapperRefs.c
+  mapperSuper.c
+  mapperSwitch.c
+  mapperTable.c
+  mapperTime.c
+  mapperTree.c
+  mapperTruth.c
+  mapperUtils.c
+  mapperVec.c
+)
