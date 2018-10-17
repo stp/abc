@@ -454,6 +454,14 @@ int Ver_ParseModule( Ver_Man_t * pMan )
             RetValue = Ver_ParseSignal( pMan, pNtk, VER_SIG_WIRE );
         else if ( !strcmp( pWord, "inout" ) )
             RetValue = Ver_ParseSignal( pMan, pNtk, VER_SIG_INOUT );
+	// If there is a parameter declared here
+        else if ( !strcmp( pWord, "parameter" ) )
+        {
+            printf("%s (line %d): ", Ver_StreamGetFileName(p), Ver_StreamGetLineNumber(p));
+            printf("Parametrization is not supported, and parameters will be ignored.\n");
+            // skip till the end of line
+            Ver_StreamSkipToChars( p, "\n" );
+        }
         else 
             break;
         if ( RetValue == 0 )
