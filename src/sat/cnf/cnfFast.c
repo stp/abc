@@ -44,7 +44,7 @@ ABC_NAMESPACE_IMPL_START
 ***********************************************************************/
 void Cnf_CollectLeaves_rec( Aig_Obj_t * pRoot, Aig_Obj_t * pObj, Vec_Ptr_t * vSuper, int fStopCompl )
 {
-    if ( pRoot != pObj && (pObj->fMarkA || (fStopCompl && Aig_IsComplement(pObj))) )
+    if ( pRoot != pObj && ((fStopCompl && Aig_IsComplement(pObj)) || Aig_Regular(pObj)->fMarkA) )
     {
         Vec_PtrPushUnique( vSuper, fStopCompl ? pObj : Aig_Regular(pObj) );
         return;
@@ -694,4 +694,3 @@ Cnf_Dat_t * Cnf_DeriveFast( Aig_Man_t * p, int nOutputs )
 
 
 ABC_NAMESPACE_IMPL_END
-
