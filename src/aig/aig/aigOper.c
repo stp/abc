@@ -118,6 +118,10 @@ Aig_Obj_t * Aig_And( Aig_Man_t * p, Aig_Obj_t * p0, Aig_Obj_t * p1 )
     if ( p->fAddStrash && (Aig_ObjIsNode(Aig_Regular(p0)) || Aig_ObjIsNode(Aig_Regular(p1))) )
     { // http://fmv.jku.at/papers/BrummayerBiere-MEMICS06.pdf
         Aig_Obj_t * pFanA, * pFanB, * pFanC, * pFanD;
+        if ( Aig_Regular(p0)->Id > Aig_Regular(p1)->Id )
+        {
+            Aig_Obj_t * pTemp = p0; p0 = p1; p1 = pTemp;
+        }
         pFanA = Aig_ObjChild0(Aig_Regular(p0));
         pFanB = Aig_ObjChild1(Aig_Regular(p0));
         pFanC = Aig_ObjChild0(Aig_Regular(p1));
