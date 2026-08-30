@@ -2322,6 +2322,12 @@ Vec_Str_t * encodeSOP(char * pSop, int nFanins, int nCubes){
 
 ***********************************************************************/
 
+// The SOP derivation below is the only CUDD user in the CEC package, and
+// ABC_USE_CUDD is how the rest of the tree guards code that needs the BDD
+// package. Without it, these three functions leave undefined references to
+// Cudd_* and the no-CUDD build does not link.
+#ifdef ABC_USE_CUDD
+
 char * extractSOP( DdManager * dd, DdNode * bFunc, int nFanins, int polarity, int * _nCubes){
     
     extern int Abc_CountZddCubes( DdManager * dd, DdNode * zCover );
@@ -2561,6 +2567,8 @@ void Cec_DeriveSOPs( Gia_Man_t * p ){
   SeeAlso     []
 
 ***********************************************************************/
+
+#endif // ABC_USE_CUDD
 
 int evaluate_mffc(Gia_Man_t * p, int rootId, int fanId, Vec_Int_t * vLeaves){
 
@@ -4369,7 +4377,9 @@ Gia_Man_t * Cec_SimGenRun( Gia_Man_t * p, Cec_ParSimGen_t * pPars ){
     pManSim = Cec4_ManCreate( pMapped, pCECPars );
     pManSim->pPars->fVerbose = 0; // disabling verbose sat solver
 
+#ifdef ABC_USE_CUDD
     Cec_DeriveSOPs( pMapped );
+#endif
 
     /*
     if (pPars->fVeryVerbose)
