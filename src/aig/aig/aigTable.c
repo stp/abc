@@ -36,14 +36,25 @@ ABC_NAMESPACE_IMPL_START
 // terms multiply a 0/1 flag by a small constant. Doing those two in unsigned
 // arithmetic is defined for every Id and keeps the result a function of the
 // operands alone.
-static unsigned long Aig_Hash( Aig_Obj_t * pObj, int TableSize ) 
+//
+// The mixed key is reduced to a bucket with two multiplies rather than with a
+// remainder, which is a hardware divide by a runtime value on the hottest path
+// this package has. The key is multiplied by an odd 64-bit constant and the
+// high half of the product taken, which every input bit has had an effect on;
+// that is then mapped onto the table by multiplying it by the table size and
+// taking the high half again. Neither step needs the size to be a power of
+// two: nTableSize is a public field and a client may size the table itself.
+#define AIG_HASH_MULT ABC_CONST(0x9E3779B97F4A7C15)
+
+static unsigned Aig_Hash( Aig_Obj_t * pObj, int TableSize )
 {
-    unsigned long Key = Aig_ObjIsExor(pObj) * 1699;
+    unsigned Key = Aig_ObjIsExor(pObj) * 1699, Hash;
     Key ^= (unsigned)Aig_ObjFanin0(pObj)->Id * 7937u;
     Key ^= (unsigned)Aig_ObjFanin1(pObj)->Id * 2971u;
     Key ^= Aig_ObjFaninC0(pObj) * 911;
     Key ^= Aig_ObjFaninC1(pObj) * 353;
-    return Key % TableSize;
+    Hash = (unsigned)(((word)Key * AIG_HASH_MULT) >> 32);
+    return (unsigned)(((word)Hash * (word)(unsigned)TableSize) >> 32);
 }
 
 // returns the place where this node is stored (or should be stored)

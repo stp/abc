@@ -31,6 +31,12 @@ ABC_NAMESPACE_IMPL_START
 ///                     FUNCTION DEFINITIONS                         ///
 ////////////////////////////////////////////////////////////////////////
 
+// The mixed key is reduced to a bucket with two multiplies rather than with a
+// remainder, for the reason given over Aig_Hash() in aigTable.c: a remainder
+// by a runtime table size is a hardware divide on every lookup and every
+// insert, and this reduction needs no power-of-two table to avoid it.
+#define GIA_HASH_MULT ABC_CONST(0x9E3779B97F4A7C15)
+
 /**Function*************************************************************
 
   Synopsis    [Returns the place where this node is stored (or should be stored).]
@@ -44,12 +50,13 @@ ABC_NAMESPACE_IMPL_START
 ***********************************************************************/
 static inline int Gia_ManHashOne( int iLit0, int iLit1, int iLitC, int TableSize ) 
 {
-    unsigned Key = iLitC * 2011;
+    unsigned Key = iLitC * 2011, Hash;
     Key += Abc_Lit2Var(iLit0) * 7937;
     Key += Abc_Lit2Var(iLit1) * 2971;
     Key += Abc_LitIsCompl(iLit0) * 911;
     Key += Abc_LitIsCompl(iLit1) * 353;
-    return (int)(Key % TableSize);
+    Hash = (unsigned)(((word)Key * GIA_HASH_MULT) >> 32);
+    return (int)(((word)Hash * (word)(unsigned)TableSize) >> 32);
 }
 static inline int * Gia_ManHashFind( Gia_Man_t * p, int iLit0, int iLit1, int iLitC )
 {
