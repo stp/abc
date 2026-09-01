@@ -87,38 +87,34 @@ static Aig_Obj_t ** Aig_TableFind( Aig_Man_t * p, Aig_Obj_t * pObj )
 ***********************************************************************/
 void Aig_TableResize( Aig_Man_t * p )
 {
-    Aig_Obj_t * pEntry, * pNext;
-    Aig_Obj_t ** pTableOld, ** ppPlace;
-    int nTableSizeOld, Counter, i;
-    abctime clk;
+    Aig_Obj_t * pEntry;
+    Aig_Obj_t ** ppPlace;
+    int Counter, i;
     assert( p->pTable != NULL );
-clk = Abc_Clock();
-    // save the old table
-    pTableOld = p->pTable;
-    nTableSizeOld = p->nTableSize;
-    // get the new table
-    p->nTableSize = Abc_PrimeCudd( 2 * Aig_ManNodeNum(p) ); 
+    // The table is rebuilt from vObjs rather than from the old buckets, so
+    // the old array can be freed before the new one is allocated: the
+    // resize transient is max(old, new) instead of their sum, and the
+    // sweep reads the nodes sequentially where chain-chasing did not.
+    // Membership is unchanged -- the table holds exactly the AND and EXOR
+    // nodes, which is the invariant the Counter assert below has always
+    // stated, and the hash is recomputed from each node's fanins either
+    // way. Stale pNext values from the freed chains are never read: a
+    // node's pNext is only walked once it is in the new table, and it is
+    // nulled at insertion.
+    ABC_FREE( p->pTable );
+    p->nTableSize = Abc_PrimeCudd( 2 * Aig_ManNodeNum(p) );
     p->pTable = ABC_ALLOC( Aig_Obj_t *, p->nTableSize );
     memset( p->pTable, 0, sizeof(Aig_Obj_t *) * p->nTableSize );
-    // rehash the entries from the old table
     Counter = 0;
-    for ( i = 0; i < nTableSizeOld; i++ )
-    for ( pEntry = pTableOld[i], pNext = pEntry? pEntry->pNext : NULL; 
-          pEntry; pEntry = pNext, pNext = pEntry? pEntry->pNext : NULL )
+    Aig_ManForEachNode( p, pEntry, i )
     {
-        // get the place where this entry goes in the table 
         ppPlace = Aig_TableFind( p, pEntry );
         assert( *ppPlace == NULL ); // should not be there
-        // add the entry to the list
         *ppPlace = pEntry;
         pEntry->pNext = NULL;
         Counter++;
     }
     assert( Counter == Aig_ManNodeNum(p) );
-//    printf( "Increasing the structural table size from %6d to %6d. ", nTableSizeOld, p->nTableSize );
-//    ABC_PRT( "Time", Abc_Clock() - clk );
-    // replace the table and the parameters
-    ABC_FREE( pTableOld );
 }
 
 /**Function*************************************************************
