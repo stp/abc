@@ -54,24 +54,56 @@ static inline Aig_Obj_t * Gia_ObjChild1Copy2( Aig_Obj_t ** ppNodes, Gia_Obj_t * 
   SeeAlso     []
 
 ***********************************************************************/
-void Gia_ManFromAig_rec( Gia_Man_t * pNew, Aig_Man_t * p, Aig_Obj_t * pObj )
+void Gia_ManFromAig_rec( Gia_Man_t * pNew, Aig_Man_t * p, Aig_Obj_t * pRoot )
 {
-    Aig_Obj_t * pNext;
-    if ( pObj->iData )
+    // Each node is pushed twice: regular means "visit", and complemented --
+    // pushed first, so reached last -- means "build", by which point both
+    // fanins are done. The equivalence links are collected rather than
+    // written, since a node names a successor that is built after it.
+    Vec_Ptr_t * vStack, * vLinks = NULL;
+    Aig_Obj_t * pObj, * pNext;
+    int i;
+    if ( pRoot->iData )
         return;
-    assert( Aig_ObjIsNode(pObj) );
-    Gia_ManFromAig_rec( pNew, p, Aig_ObjFanin0(pObj) );
-    Gia_ManFromAig_rec( pNew, p, Aig_ObjFanin1(pObj) );
-    pObj->iData = Gia_ManAppendAnd( pNew, Gia_ObjChild0Copy(pObj), Gia_ObjChild1Copy(pObj) );
-    if ( p->pEquivs && (pNext = Aig_ObjEquiv(p, pObj)) )
+    vStack = Vec_PtrAlloc( 100 );
+    if ( p->pEquivs )
+        vLinks = Vec_PtrAlloc( 100 );
+    Vec_PtrPush( vStack, pRoot );
+    while ( Vec_PtrSize(vStack) )
     {
-        int iObjNew, iNextNew;
-        Gia_ManFromAig_rec( pNew, p, pNext );
-        iObjNew  = Abc_Lit2Var(pObj->iData);
-        iNextNew = Abc_Lit2Var(pNext->iData);
-        if ( pNew->pNexts )
-            pNew->pNexts[iObjNew] = iNextNew;        
+        pObj = (Aig_Obj_t *)Vec_PtrPop( vStack );
+        if ( Aig_IsComplement(pObj) )
+        {
+            pObj = Aig_Regular(pObj);
+            // an equivalence successor can build it before this is reached
+            if ( pObj->iData )
+                continue;
+            pObj->iData = Gia_ManAppendAnd( pNew, Gia_ObjChild0Copy(pObj), Gia_ObjChild1Copy(pObj) );
+            if ( p->pEquivs && (pNext = Aig_ObjEquiv(p, pObj)) )
+            {
+                Vec_PtrPush( vLinks, pObj );
+                if ( !pNext->iData )
+                    Vec_PtrPush( vStack, pNext );
+            }
+            continue;
+        }
+        if ( pObj->iData )
+            continue;
+        assert( Aig_ObjIsNode(pObj) );
+        Vec_PtrPush( vStack, Aig_Not(pObj) );
+        if ( !Aig_ObjFanin1(pObj)->iData )
+            Vec_PtrPush( vStack, Aig_ObjFanin1(pObj) );
+        if ( !Aig_ObjFanin0(pObj)->iData )
+            Vec_PtrPush( vStack, Aig_ObjFanin0(pObj) );
     }
+    if ( vLinks )
+    {
+        if ( pNew->pNexts )
+            Vec_PtrForEachEntry( Aig_Obj_t *, vLinks, pObj, i )
+                pNew->pNexts[Abc_Lit2Var(pObj->iData)] = Abc_Lit2Var(Aig_ObjEquiv(p, pObj)->iData);
+        Vec_PtrFree( vLinks );
+    }
+    Vec_PtrFree( vStack );
 }
 Gia_Man_t * Gia_ManFromAig( Aig_Man_t * p )
 {
