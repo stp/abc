@@ -1168,6 +1168,58 @@ void Mf_ManSetFlowRefs( Gia_Man_t * p, Vec_Int_t * vRefs )
     for ( i = 0; i < Vec_IntSize(vRefs); i++ )
         Vec_IntUpdateEntry( vRefs, i, 1 );
 }
+/**Function*************************************************************
+
+  Synopsis    [Recounts the mapping references from the final best cuts.]
+
+  Description [nMapRefs is a 16-bit bitfield that the exact-area rounds
+  maintain with unchecked ++/--, and Mf_ManSetMapRefs recomputes it from the
+  best cuts only when those rounds are not running. A decrement of a counter
+  that is already zero wraps it to 65535 and a later increment wraps it back,
+  so the bookkeeping can leave a node that is still a leaf of a live best cut
+  reading zero references, and a node reading a reference nothing gave it.
+
+  Everything downstream reads that set. Mf_ManDeriveCnf gives a CNF variable
+  only to an object whose count is non-zero, so a cut leaf without one is
+  written into the clauses as Abc_Var2Lit(-1, c) -- a negative literal naming
+  no variable. Mf_ManDeriveMappingGia walks the same set and takes each
+  node's best cut, which for a node that never selected one is whatever its
+  stale iCutSet points at; the cut size and truth table that comes back then
+  size a Kit_ cover, and that has overflowed the heap.
+
+  Counting again from the best cuts that were actually selected makes the
+  reference set exactly the set reachable from the CO drivers through the
+  mapping. Area, Edge and Clause are recomputed with it, because the mapping
+  derivation sizes its vectors from them. Where the incremental counting was
+  already right this changes nothing.]
+               
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+void Mf_ManRecountMapRefs( Mf_Man_t * p )
+{
+    int i, k, Id, * pCut;
+    Gia_ManForEachAndId( p->pGia, i )
+        Mf_ManObj(p, i)->nMapRefs = 0;
+    Gia_ManForEachCoDriverId( p->pGia, Id, i )
+        Mf_ObjMapRefInc( p, Id );
+    p->pPars->Area = p->pPars->Edge = p->pPars->Clause = 0;
+    Gia_ManForEachAndReverseId( p->pGia, i )
+    {
+        if ( !Mf_ObjMapRefNum(p, i) )
+            continue;
+        pCut = Mf_ObjCutBest( p, i );
+        for ( k = 1; k <= Mf_CutSize(pCut); k++ )
+            Mf_ObjMapRefInc( p, pCut[k] );
+        p->pPars->Edge += Mf_CutSize(pCut);
+        p->pPars->Area++;
+        if ( p->pPars->fGenCnf || p->pPars->fGenLit )
+            p->pPars->Clause += Mf_CutArea(p, Mf_CutSize(pCut), Mf_CutFunc(pCut));
+    }
+}
+
 int Mf_ManSetMapRefs( Mf_Man_t * p )
 {
     float Coef = 1.0 / (1.0 + (p->Iter + 1) * (p->Iter + 1));
@@ -1842,6 +1894,7 @@ Gia_Man_t * Mf_ManPerformMapping( Gia_Man_t * pGia, Jf_Par_t * pPars )
     p->fUseEla = 1;
     for ( ; p->Iter < p->pPars->nRounds + pPars->nRoundsEla; p->Iter++ )
         Mf_ManComputeMapping( p );
+    Mf_ManRecountMapRefs( p );
     //Mf_ManOptimization( p );
     if ( pPars->fVeryVerbose && pPars->fCutMin )
         Vec_MemDumpTruthTables( p->vTtMem, Gia_ManName(p->pGia), pPars->nLutSize );
