@@ -91,9 +91,17 @@ if(ABC_USE_NAMESPACE)
     set_source_files_properties(${ABC_SRC} PROPERTIES LANGUAGE CXX)
 endif()
 
+# Allocation failures cross ABC's C frames on their way to STP's handler.
+# C++ unwinding needs exception tables even in translation units with no
+# cleanup of their own.
+list(APPEND ABC_SRC src/misc/util/utilAlloc.cpp)
+
 function(abc_properties target visibility)
     target_include_directories(${target} ${visibility} ${CMAKE_CURRENT_SOURCE_DIR}/src )
     target_compile_options_filtered(${target} ${visibility} ${ABC_CFLAGS} ${ABC_CXXFLAGS} -Wno-unused-but-set-variable )
+    if(NOT MSVC)
+        target_compile_options(${target} PRIVATE -fexceptions)
+    endif()
     target_link_libraries(${target} ${visibility} ${ABC_LIBS})
 endfunction()
 

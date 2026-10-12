@@ -261,13 +261,46 @@ typedef ABC_INT64_T iword;
 #define ABC_PRMn(a,f)   (Abc_Print(1, "%s =", (a)), Abc_Print(1, "%10.3f MB  ",    1.0*((double)(f))/(1<<20)))
 #define ABC_PRMP(a,f,F) (Abc_Print(1, "%s =", (a)), Abc_Print(1, "%10.3f MB (%6.2f %%)\n",  (1.0*((double)(f))/(1<<20)), (((double)(F))? 100.0*((double)(f))/((double)(F)) : 0.0) ) )
 
-#define ABC_ALLOC(type, num)     ((type *) malloc(sizeof(type) * (size_t)(num)))
-#define ABC_CALLOC(type, num)    ((type *) calloc((size_t)(num), sizeof(type)))
-#define ABC_FALLOC(type, num)    ((type *) memset(malloc(sizeof(type) * (size_t)(num)), 0xff, sizeof(type) * (size_t)(num)))
+/* STP catches allocation failure at its C++ API boundary. Never publish a
+ * null buffer to ABC's callers, which assume allocation succeeded. */
+#define ABC_STP_CHECKED_ALLOCATIONS 1
+extern void Abc_ThrowBadAlloc( void );
+
+static inline size_t Abc_AllocSize( size_t size, size_t count )
+{
+    if ( count && size > (size_t)-1 / count )
+        Abc_ThrowBadAlloc();
+    return size * count;
+}
+static inline void * Abc_AllocMemory( size_t size )
+{
+    void * result = malloc( size ? size : 1 );
+    if ( !result )
+        Abc_ThrowBadAlloc();
+    return result;
+}
+static inline void * Abc_CallocMemory( size_t size, size_t count )
+{
+    size_t bytes = Abc_AllocSize( size, count );
+    void * result = calloc( bytes ? bytes : 1, 1 );
+    if ( !result )
+        Abc_ThrowBadAlloc();
+    return result;
+}
+static inline void * Abc_ReallocMemory( void * ptr, size_t size )
+{
+    void * result = realloc( ptr, size ? size : 1 );
+    if ( !result )
+        Abc_ThrowBadAlloc();
+    return result;
+}
+
+#define ABC_ALLOC(type, num)     ((type *) Abc_AllocMemory(Abc_AllocSize(sizeof(type), (size_t)(num))))
+#define ABC_CALLOC(type, num)    ((type *) Abc_CallocMemory(sizeof(type), (size_t)(num)))
+#define ABC_FALLOC(type, num)    ((type *) memset(ABC_ALLOC(type, num), 0xff, Abc_AllocSize(sizeof(type), (size_t)(num))))
 #define ABC_FREE(obj)            ((obj) ? (free((char *) (obj)), (obj) = 0) : 0)
 #define ABC_REALLOC(type, obj, num) \
-        ((obj) ? ((type *) realloc((char *)(obj), sizeof(type) * (size_t)(num))) : \
-         ((type *) malloc(sizeof(type) * (size_t)(num))))
+        ((type *) Abc_ReallocMemory((void *)(obj), Abc_AllocSize(sizeof(type), (size_t)(num))))
 
 static inline int      Abc_AbsInt( int a        )             { return a < 0 ? -a : a; }
 static inline int      Abc_MaxInt( int a, int b )             { return a > b ?  a : b; }
