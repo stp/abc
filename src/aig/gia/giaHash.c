@@ -42,11 +42,18 @@ ABC_NAMESPACE_IMPL_START
   SeeAlso     []
 
 ***********************************************************************/
-static inline int Gia_ManHashOne( int iLit0, int iLit1, int iLitC, int TableSize ) 
+// The literals are ints, so multiplying them by these constants in int
+// arithmetic overflows once the manager holds about 270,600 objects -- a size
+// an ordinary bit-blasted query reaches -- and signed overflow is undefined
+// rather than the wrap the mixing step wants. The three literal products are
+// done in unsigned arithmetic instead, which is defined for every literal and
+// gives the same 32-bit key the wrap did; the other two terms multiply a 0/1
+// flag by a small constant.
+static inline int Gia_ManHashOne( int iLit0, int iLit1, int iLitC, int TableSize )
 {
-    unsigned Key = iLitC * 2011;
-    Key += Abc_Lit2Var(iLit0) * 7937;
-    Key += Abc_Lit2Var(iLit1) * 2971;
+    unsigned Key = (unsigned)iLitC * 2011u;
+    Key += (unsigned)Abc_Lit2Var(iLit0) * 7937u;
+    Key += (unsigned)Abc_Lit2Var(iLit1) * 2971u;
     Key += Abc_LitIsCompl(iLit0) * 911;
     Key += Abc_LitIsCompl(iLit1) * 353;
     return (int)(Key % TableSize);
