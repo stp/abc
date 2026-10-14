@@ -73,6 +73,8 @@ struct Mf_Man_t_
     Vec_Int_t       vCnfSizes;      // handles to CNF
     Vec_Int_t       vCnfMem;        // memory for CNF
     Vec_Int_t       vTemp;          // temporary array
+    Vec_Ptr_t       vRefCuts;       // cuts open in a reference walk
+    Vec_Int_t       vRefNext;       // the leaf each of them visits next
     int             iCur;           // current position
     int             Iter;           // mapping iterations
     int             fUseEla;        // use exact area
@@ -1423,6 +1425,8 @@ void Mf_ManFree( Mf_Man_t * p )
     ABC_FREE( p->vCnfMem.pArray );
     ABC_FREE( p->vPages.pArray );
     ABC_FREE( p->vTemp.pArray );
+    ABC_FREE( p->vRefCuts.pArray );
+    ABC_FREE( p->vRefNext.pArray );
     ABC_FREE( p->pLfObjs );
     ABC_FREE( p );
 }
@@ -1549,21 +1553,51 @@ void Mf_ManComputeCuts( Mf_Man_t * p )
   SeeAlso     []
 
 ***********************************************************************/
+// A reference walk goes on into the best cut of every leaf whose first
+// reference it gives (or last it takes), so it is as deep as the chain of
+// cuts below it, which is as long as the logic is deep. It keeps its own
+// stack rather than a call frame per cut, so the depth it can reach is
+// bounded by the manager rather than by the process stack. A frame is an
+// open cut and the leaf it visits next: the counts change in the order the
+// recursion changed them, and the area comes out the same.
+static inline int Mf_CutRefWalk( Mf_Man_t * p, int * pCut, int fRef )
+{
+    Vec_Ptr_t * vCuts = &p->vRefCuts;
+    Vec_Int_t * vNext = &p->vRefNext;
+    int i, iLeaf, fOpen, Count = Mf_CutArea(p, Mf_CutSize(pCut), Mf_CutFunc(pCut));
+    assert( Vec_PtrSize(vCuts) == 0 && Vec_IntSize(vNext) == 0 );
+    Vec_PtrPush( vCuts, pCut );
+    Vec_IntPush( vNext, 1 );
+    while ( Vec_PtrSize(vCuts) )
+    {
+        pCut = (int *)Vec_PtrEntryLast( vCuts );
+        i = Vec_IntEntryLast( vNext );
+        if ( i > Mf_CutSize(pCut) )
+        {
+            Vec_PtrPop( vCuts );
+            Vec_IntPop( vNext );
+            continue;
+        }
+        Vec_IntAddToEntry( vNext, Vec_IntSize(vNext) - 1, 1 );
+        iLeaf = pCut[i];
+        fOpen = fRef ? !Mf_ObjMapRefInc(p, iLeaf) : !Mf_ObjMapRefDec(p, iLeaf);
+        if ( fOpen && Mf_ManObj(p, iLeaf)->iCutSet )
+        {
+            pCut = Mf_ObjCutBest( p, iLeaf );
+            Count += Mf_CutArea( p, Mf_CutSize(pCut), Mf_CutFunc(pCut) );
+            Vec_PtrPush( vCuts, pCut );
+            Vec_IntPush( vNext, 1 );
+        }
+    }
+    return Count;
+}
 int Mf_CutRef_rec( Mf_Man_t * p, int * pCut )
 {
-    int i, Count = Mf_CutArea(p, Mf_CutSize(pCut), Mf_CutFunc(pCut));
-    for ( i = 1; i <= Mf_CutSize(pCut); i++ )
-        if ( !Mf_ObjMapRefInc(p, pCut[i]) && Mf_ManObj(p, pCut[i])->iCutSet )
-            Count += Mf_CutRef_rec( p, Mf_ObjCutBest(p, pCut[i]) );
-    return Count;
+    return Mf_CutRefWalk( p, pCut, 1 );
 }
 int Mf_CutDeref_rec( Mf_Man_t * p, int * pCut )
 {
-    int i, Count = Mf_CutArea(p, Mf_CutSize(pCut), Mf_CutFunc(pCut));
-    for ( i = 1; i <= Mf_CutSize(pCut); i++ )
-        if ( !Mf_ObjMapRefDec(p, pCut[i]) && Mf_ManObj(p, pCut[i])->iCutSet )
-            Count += Mf_CutDeref_rec( p, Mf_ObjCutBest(p, pCut[i]) );
-    return Count;
+    return Mf_CutRefWalk( p, pCut, 0 );
 }
 static inline int Mf_CutAreaRefed( Mf_Man_t * p, int * pCut )
 {
